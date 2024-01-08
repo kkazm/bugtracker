@@ -1,0 +1,42 @@
+### Sign up
+< {%
+    request.variables.set("username", "konrad")
+%}
+POST http://localhost:8080/signup
+Content-Type: application/json
+
+{
+  "firstName": "Konrad",
+  "lastName": "Konrad",
+  "username":  "{{username}}",
+  "password": "pass"
+}
+> {%
+    client.global.set("auth_token", response.body.token)
+%}
+
+### Login
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "username": "konrad",
+  "password": "pass"
+}
+> {%
+    client.global.set("auth_token", response.body.token)
+%}
+
+### Get hello
+GET http://localhost:8080/hello
+Authorization: Bearer {{auth_token}}
+
+###
+POST http://localhost:8080/api/item
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="field-name"; filename="file.txt"
+
+< ./relative/path/to/local_file.txt
+--WebAppBoundary--
