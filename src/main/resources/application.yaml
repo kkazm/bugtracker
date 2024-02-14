@@ -1,23 +1,28 @@
 myapp:
-  # TODO
-  jwtKey: hi
+  jwtKey: hi # TODO
+
 
 spring:
-#  devtools:
-#    add-properties: false
+  devtools:
+    restart:
+      quiet-period: 2000 # Default is 400ms
+      poll-interval: 2001 # Default is 400ms
 
+  #    devtools:
+  #    add-properties: false
   h2:
     console:
       enabled: true
-
   liquibase:
     enabled: false
-
   datasource:
     url: jdbc:h2:mem:mydb;DB_CLOSE_DELAY=-1
-  #    url: 'jdbc:postgresql://vps626754.ovh.net/mydb'
-  #    username: postgres
-  #    password: asyncsupportconfigurer
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  #      url: 'jdbc:postgresql://vps626754.ovh.net/mydb'
+  #      username: postgres
+  #      password: asyncsupportconfigurer
 
   jpa:
     hibernate:
@@ -25,13 +30,11 @@ spring:
     properties:
       hibernate:
         highlight_sql: true
-#        generate_statistics: true
-#        use_sql_comments: true
+        #        generate_statistics: true
+        #        use_sql_comments: true
         format_sql: true
     open-in-view: false
 #    generate-ddl: true
-
-
 
 server:
   error:
