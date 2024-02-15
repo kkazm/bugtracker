@@ -21,12 +21,9 @@ public class User {
     @GeneratedValue
     @Column(name = "id", nullable = false)
     private Long id;
-
     @Column(unique = true, nullable = false)
     private String username;
-
     private String password;
-
     private String roles;
 
     public List<SimpleGrantedAuthority> getRoles() {
@@ -36,4 +33,5 @@ public class User {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
     }
+
 }

@@ -3,6 +3,7 @@ package ovh.kkazm.bugtracker.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -56,13 +58,14 @@ public class SecurityConfiguration {
                                         "/signup",
                                         "/login",
                                         "/swagger-ui**/**",
-                                        "/v3/api-docs**/**"
+                                        "/v3/api-docs**/**",
+                                        "/projects"
                                 )
                                 .permitAll()
-                                .requestMatchers(
-                                        "/hello"
-                                )
-                                .authenticated()
+//                                .requestMatchers(
+//                                        "/projects"
+//                                )
+//                                .authenticated()
                                 .anyRequest()
                                 .denyAll()
                 )

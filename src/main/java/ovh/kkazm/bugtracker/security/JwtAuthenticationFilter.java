@@ -26,11 +26,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * TODO Filter only when required
      */
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void
+    doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 /*
         if (!this.requestMatcher.matches(request)) {
             logger.debug("Did not match request to " + this.requestMatcher);
@@ -49,17 +47,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             claims = jwtService.verifyAndExtractAllClaims(jwt);
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         final var username = claims.getSubject();
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            final var authToken =
-                    new UsernamePasswordAuthenticationToken(
-                            username,
-                            null,
-                            Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+            final var authToken = new UsernamePasswordAuthenticationToken(
+                    username,
+                    null,
+                    Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }

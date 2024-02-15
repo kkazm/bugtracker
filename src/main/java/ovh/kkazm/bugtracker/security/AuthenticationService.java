@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,12 +26,13 @@ public class AuthenticationService {
 
     @Transactional
     public String signUpUser(final SignUpUserRequest request) {
-        final var userAccountExists = userRepository.existsByUsername(request.username());
+        String username = request.username().toLowerCase();
+        final var userAccountExists = userRepository.existsByUsername(username);
         if (userAccountExists) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username taken");
         }
         final User user = User.builder()
-                .username(request.username())
+                .username(username)
                 .password(passwordEncoder.encode(request.password()))
                 .roles("ROLE_USER") // TODO Which role?
                 .build();
@@ -42,11 +42,9 @@ public class AuthenticationService {
 
     @Transactional
     public String loginUser(final LoginUserRequest request) {
-        Authentication authentication = null;
         try {
-            authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.username(), request.password())
-            );
+            authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
             final User user = User.builder()
                     .username(request.username())
                     .roles("ROLE_USER")

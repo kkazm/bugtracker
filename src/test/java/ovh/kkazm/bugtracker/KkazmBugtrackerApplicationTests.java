@@ -24,7 +24,7 @@ class KkazmBugtrackerApplicationTests {
     }
 
     @Test
-    void whenUnauthenticatedThenRedirect() throws Exception {
+    void whenUnauthenticatedThenForbidden() throws Exception {
         this.mockMvc.perform(get("/hello"))
                 .andExpect(status().isForbidden());
     }
