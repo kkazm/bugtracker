@@ -1,9 +1,11 @@
-package ovh.kkazm.bugtracker.security;
+package ovh.kkazm.bugtracker.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,12 +14,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ovh.kkazm.bugtracker.project.ProjectService;
+import ovh.kkazm.bugtracker.project.ProjectService.UserInfo;
+import ovh.kkazm.bugtracker.security.JwtService;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -53,6 +58,11 @@ public class AuthenticationService {
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Bad credentials");
         }
+    }
+
+    @Transactional
+    public Page<UserInfo> getAllUsers(Pageable pageable) {
+        return userRepository.findBy(pageable);
     }
 
     @Builder

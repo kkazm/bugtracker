@@ -8,6 +8,10 @@ import java.sql.SQLException;
 
 @Configuration
 public class H2Configuration {
+
+    /**
+     * Make H2 available externally
+     */
     @Bean(initMethod = "start", destroyMethod = "stop")
     public Server inMemoryH2DatabaseaServer() throws SQLException {
         return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9090");

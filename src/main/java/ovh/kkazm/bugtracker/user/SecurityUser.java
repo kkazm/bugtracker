@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+/**
+ * Only used of {@link UserDetails}
+ */
 @RequiredArgsConstructor
 @Getter
 @Setter

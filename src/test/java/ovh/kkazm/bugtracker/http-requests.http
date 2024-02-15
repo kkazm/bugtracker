@@ -28,8 +28,13 @@ Content-Type: application/json
     client.global.set("auth_token", response.body.token)
 %}
 
+### Get all Users
+GET http://localhost:8080/users?page=0&per_page=10&sort=id&direction=asc
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+
 ### Get all projects
-GET http://localhost:8080/projects?page=0&per_page=10&direction=asc
+GET http://localhost:8080/projects?page=0&per_page=10&sort=id&direction=asc
 Accept: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -41,10 +46,6 @@ Authorization: Bearer {{auth_token}}
 {
   "projectName": "Example project 3"
 }
-
-###
-GET http://localhost:8080/data
-Accept: application/json
 
 ###
 POST http://localhost:8080/api/item

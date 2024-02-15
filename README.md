@@ -27,7 +27,7 @@ By default, the application uses the H2 in-memory database. All data is lost aft
 
 When the application is running, the database can be accessed externally using the following connection properties:
 
-    url: jdbc:h2:mem:mydb
+    url: jdbc:h2:tcp://localhost:9090/mem:mydb
     driver-class-name: org.h2.Driver
     username: sa
     password:

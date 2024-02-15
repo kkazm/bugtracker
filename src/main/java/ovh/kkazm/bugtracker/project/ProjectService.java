@@ -1,5 +1,8 @@
 package ovh.kkazm.bugtracker.project;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
+import java.io.Serializable;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
@@ -19,15 +24,18 @@ public class ProjectService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createProject(CreateProjectRequest createProjectRequest, Authentication authentication) {
-        // TODO Use MapStruct
+    public Project createProject(CreateProjectRequest createProjectRequest, Authentication authentication) {
         final var name = createProjectRequest.projectName();
         final var project = new Project();
         project.setName(name);
         User user = userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid project owner"));
         project.setOwner(user);
-        projectRepository.save(project);
+        if (projectRepository.existsByNameIgnoreCase(project.getName())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "A project with this name already exists.");
+        } else {
+            return projectRepository.save(project);
+        }
     }
 
     @Transactional
@@ -35,7 +43,11 @@ public class ProjectService {
         return projectRepository.findBy(pageable);
     }
 
-    public record CreateProjectRequest(String projectName) {
+    public record CreateProjectRequest(
+            @NotNull
+            @NotBlank
+            String projectName
+    ) {
     }
 
     /**
@@ -43,18 +55,28 @@ public class ProjectService {
      */
     public interface ProjectInfo {
         Long getId();
+
         String getName();
+
         UserInfo getOwner();
     }
 
     /**
      * Projection for {@link User}
      */
-    public static interface UserInfo {
+    public interface UserInfo {
         Long getId();
 
         String getUsername();
 
         String getRoles();
     }
+
+    /**
+     * DTO for {@link Project}
+     */
+    @JsonIgnoreProperties(ignoreUnknown = true) // TODO Ignore or no?
+    public record ProjectDto(Long id, String name) implements Serializable {
+    }
+
 }
