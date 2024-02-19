@@ -33,14 +33,12 @@ public class SecurityConfiguration {
     private final PasswordEncoder passwordEncoder;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain
+    securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                // TODO CSRF
-                .csrf(AbstractHttpConfigurer::disable)
-                // TODO CORS
-                .cors(withDefaults())
-                // TODO Headers
-                .headers(headers -> {
+                .csrf(AbstractHttpConfigurer::disable) // TODO CSRF
+                .cors(withDefaults()) // TODO CORS
+                .headers(headers -> { // TODO Headers
 //                    headers.defaultsDisabled();
                     headers.frameOptions(withDefaults()).disable();
 //                    headers.xssProtection(Customizer.withDefaults());
@@ -54,12 +52,12 @@ public class SecurityConfiguration {
                                 .requestMatchers(toH2Console())
                                 .permitAll()
                                 .requestMatchers(
+                                        "/swagger-ui**/**",
+                                        "/v3/api-docs**/**",
                                         "/error",
                                         "/signup",
                                         "/login",
-                                        "/swagger-ui**/**",
-                                        "/v3/api-docs**/**",
-                                        "/projects",
+                                        "/projects/**",
                                         "/users"
                                 )
                                 .permitAll()
@@ -90,10 +88,9 @@ public class SecurityConfiguration {
      * Expose AuthenticationManger bean
      */
     @Bean
-    public AuthenticationManager authenticationManager(
-            UserDetailsService userDetailsService,
-            PasswordEncoder passwordEncoder
-    ) {
+    public AuthenticationManager
+    authenticationManager(UserDetailsService userDetailsService,
+                          PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder);

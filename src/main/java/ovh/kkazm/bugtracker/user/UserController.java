@@ -1,14 +1,16 @@
 package ovh.kkazm.bugtracker.user;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ovh.kkazm.bugtracker.project.ProjectService;
+import ovh.kkazm.bugtracker.project.ProjectService.UserInfo;
 import ovh.kkazm.bugtracker.user.UserService.LoginUserRequest;
 import ovh.kkazm.bugtracker.user.UserService.SignUpUserRequest;
 
@@ -29,8 +31,7 @@ public class UserController {
      */
     @PostMapping("/signup")
     public ResponseEntity<Map<String, String>>
-    signUpUser(@Valid @RequestBody final SignUpUserRequest request, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) return ResponseEntity.badRequest().build();
+    signUpUser(@Valid @RequestBody final SignUpUserRequest request) {
         String jwt = userService.signUpUser(request);
         return ResponseEntity.ok(Map.of("token", jwt));
     }
@@ -49,11 +50,11 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public Page<ProjectService.UserInfo>
-    getAllUsers(@RequestParam Integer page, @RequestParam Integer per_page, @RequestParam String sort, @RequestParam String direction) {
-        Pageable pageable = PageRequest.of(page, per_page);
-        return userService.getAllUsers(pageable);
+    public Page<UserInfo>
+    getAllUsers(@SortDefault(sort = "username") Pageable pageable,
+                @RequestParam(required = false) @Max(20) Integer size) {
+        Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()); // TODO Sort
+        return userService.getAllUsers(pageRequest);
     }
-
 
 }

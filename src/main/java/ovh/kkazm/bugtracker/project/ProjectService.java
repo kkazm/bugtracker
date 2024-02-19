@@ -11,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ovh.kkazm.bugtracker.issue.IssueRepository;
+import ovh.kkazm.bugtracker.issue.IssueService.IssueInfo;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
@@ -22,13 +24,14 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final IssueRepository issueRepository;
 
     @Transactional
     public Project createProject(CreateProjectRequest createProjectRequest, Authentication authentication) {
         final var name = createProjectRequest.projectName();
         final var project = new Project();
         project.setName(name);
-        User user = userRepository.findByUsername(authentication.getName())
+        User user = userRepository.findByUsername(authentication.getName()) // TODO getReferenceById?
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid project owner"));
         project.setOwner(user);
         if (projectRepository.existsByNameIgnoreCase(project.getName())) {
@@ -43,6 +46,14 @@ public class ProjectService {
         return projectRepository.findBy(pageable);
     }
 
+    @Transactional
+    public Page<IssueInfo> getAllProjectIssues(Long projectId, Pageable page) {
+        if (!projectRepository.existsById(projectId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Project with this ID, does not exist");
+        }
+        return issueRepository.getAllProjectIssues(projectId, page);
+    }
+
     public record CreateProjectRequest(
             @NotNull
             @NotBlank
@@ -55,9 +66,7 @@ public class ProjectService {
      */
     public interface ProjectInfo {
         Long getId();
-
         String getName();
-
         UserInfo getOwner();
     }
 
@@ -66,10 +75,7 @@ public class ProjectService {
      */
     public interface UserInfo {
         Long getId();
-
         String getUsername();
-
-        String getRoles();
     }
 
     /**

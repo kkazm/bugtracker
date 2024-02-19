@@ -1,15 +1,16 @@
 package ovh.kkazm.bugtracker.project;
 
 import org.mapstruct.*;
+import ovh.kkazm.bugtracker.project.ProjectService.ProjectDto;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ProjectMapper {
 
-    Project toEntity(ProjectService.ProjectDto projectDto);
+    Project toEntity(ProjectDto projectDto);
 
-    ProjectService.ProjectDto toDto(Project project);
+    ProjectDto toDto(Project project);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Project partialUpdate(ProjectService.ProjectDto projectDto, @MappingTarget Project project);
+    Project partialUpdate(ProjectDto projectDto, @MappingTarget Project project);
 
 }
