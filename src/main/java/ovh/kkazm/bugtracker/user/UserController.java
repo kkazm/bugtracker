@@ -10,7 +10,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ovh.kkazm.bugtracker.project.ProjectService.UserInfo;
+import ovh.kkazm.bugtracker.user.UserService.UserInfo;
 import ovh.kkazm.bugtracker.user.UserService.LoginUserRequest;
 import ovh.kkazm.bugtracker.user.UserService.SignUpUserRequest;
 

@@ -48,7 +48,19 @@ Authorization: Bearer {{auth_token}}
 }
 
 ### Get all Project Issues
-GET http://localhost:8080/projects/4/issues
+GET http://localhost:8080/projects/2/issues
+
+### Create an Issue
+POST http://localhost:8080/issues
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "title": "My issue 1",
+  "description": "Example description 1",
+  "projectId": 1,
+  "assigneeUsername": "konrad"
+}
 
 ###
 POST http://localhost:8080/api/item

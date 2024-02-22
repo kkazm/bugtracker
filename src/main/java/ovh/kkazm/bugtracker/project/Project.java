@@ -27,7 +27,7 @@ public class Project {
     @Column(name = "created_at", nullable = false)
     private ZonedDateTime createdAt;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 

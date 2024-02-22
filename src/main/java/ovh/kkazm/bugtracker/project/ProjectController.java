@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ovh.kkazm.bugtracker.issue.IssueService.IssueInfo;
+import ovh.kkazm.bugtracker.issue.IssueInfo;
 import ovh.kkazm.bugtracker.project.ProjectService.CreateProjectRequest;
 import ovh.kkazm.bugtracker.project.ProjectService.ProjectDto;
 import ovh.kkazm.bugtracker.project.ProjectService.ProjectInfo;

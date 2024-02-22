@@ -5,7 +5,6 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 import ovh.kkazm.bugtracker.user.User;
 
@@ -43,13 +42,4 @@ public class JwtService {
         }
     }
 
-
-    private boolean isTokenExpired(String jwt) {
-        Date tokenExpiredDate = verifyAndExtractAllClaims(jwt).getExpiration();
-        return tokenExpiredDate.before(new Date());
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public static class BadRequestException extends RuntimeException {
-    }
 }

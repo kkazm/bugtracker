@@ -4,8 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import ovh.kkazm.bugtracker.project.ProjectService;
-import ovh.kkazm.bugtracker.project.ProjectService.UserInfo;
+import ovh.kkazm.bugtracker.user.UserService.UserInfo;
 
 import java.util.Optional;
 

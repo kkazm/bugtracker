@@ -56,15 +56,30 @@ public class SecurityConfiguration {
                                         "/v3/api-docs**/**",
                                         "/error",
                                         "/signup",
-                                        "/login",
-                                        "/projects/**",
-                                        "/users"
+                                        "/login"
                                 )
                                 .permitAll()
-//                                .requestMatchers(
-//                                        "/projects"
-//                                )
-//                                .authenticated()
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/projects**/**",
+                                        "/users**/**",
+                                        "/issues**/**"
+                                )
+                                .authenticated()
+                                .requestMatchers(
+                                        HttpMethod.DELETE,
+                                        "/projects**/**",
+                                        "/users**/**",
+                                        "/issues**/**"
+                                )
+                                .authenticated()
+                                .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/projects**/**",
+                                        "/users**/**",
+                                        "/issues**/**"
+                                )
+                                .permitAll()
                                 .anyRequest()
                                 .denyAll()
                 )

@@ -11,10 +11,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ovh.kkazm.bugtracker.issue.IssueInfo;
 import ovh.kkazm.bugtracker.issue.IssueRepository;
-import ovh.kkazm.bugtracker.issue.IssueService.IssueInfo;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
+import ovh.kkazm.bugtracker.user.UserService;
+import ovh.kkazm.bugtracker.user.UserService.UserInfo;
 
 import java.io.Serializable;
 
@@ -68,14 +70,6 @@ public class ProjectService {
         Long getId();
         String getName();
         UserInfo getOwner();
-    }
-
-    /**
-     * Projection for {@link User}
-     */
-    public interface UserInfo {
-        Long getId();
-        String getUsername();
     }
 
     /**

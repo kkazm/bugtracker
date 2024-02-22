@@ -68,6 +68,7 @@ logging:
             logging:
               ConditionEvaluationReportLogger: info # Suppress conditions evaluation report
     sql: debug
+#    root: trace
   pattern:
     dateformat: HH:mm:ss.SSS
 #    root: fatal

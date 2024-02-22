@@ -14,11 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import ovh.kkazm.bugtracker.project.ProjectService;
-import ovh.kkazm.bugtracker.project.ProjectService.UserInfo;
 import ovh.kkazm.bugtracker.security.JwtService;
-import ovh.kkazm.bugtracker.user.User;
-import ovh.kkazm.bugtracker.user.UserRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -63,6 +59,14 @@ public class UserService {
     @Transactional
     public Page<UserInfo> getAllUsers(Pageable pageable) {
         return userRepository.findBy(pageable);
+    }
+
+    /**
+     * Projection for {@link User}
+     */
+    public interface UserInfo {
+        Long getId();
+        String getUsername();
     }
 
     @Builder
