@@ -4,11 +4,9 @@ myapp:
 spring:
   devtools:
     restart:
-      quiet-period: 2000 # Default is 400ms
-      poll-interval: 2001 # Default is 400ms
-
-  #    devtools:
-  #    add-properties: false
+      quiet-period: 2000
+      poll-interval: 2001
+#      add-properties: false
   h2:
     console:
       enabled: true
