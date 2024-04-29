@@ -1,6 +1,7 @@
 package ovh.kkazm.bugtracker.issue;
 
 import org.mapstruct.*;
+import ovh.kkazm.bugtracker.issue.IssueService.IssueDto;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface IssueMapper {

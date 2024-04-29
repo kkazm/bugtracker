@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -51,28 +50,17 @@ public class SecurityConfiguration {
                         authorize -> authorize
                                 .requestMatchers(toH2Console())
                                 .permitAll()
+
                                 .requestMatchers(
                                         "/swagger-ui**/**",
                                         "/v3/api-docs**/**",
+                                        "/actuator/**",
                                         "/error",
                                         "/signup",
                                         "/login"
                                 )
                                 .permitAll()
-                                .requestMatchers(
-                                        HttpMethod.POST,
-                                        "/projects**/**",
-                                        "/users**/**",
-                                        "/issues**/**"
-                                )
-                                .authenticated()
-                                .requestMatchers(
-                                        HttpMethod.DELETE,
-                                        "/projects**/**",
-                                        "/users**/**",
-                                        "/issues**/**"
-                                )
-                                .authenticated()
+
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/projects**/**",
@@ -80,6 +68,31 @@ public class SecurityConfiguration {
                                         "/issues**/**"
                                 )
                                 .permitAll()
+
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/projects**/**",
+                                        "/users**/**",
+                                        "/issues**/**"
+                                )
+                                .authenticated()
+
+                                .requestMatchers(
+                                        HttpMethod.PATCH,
+                                        "/projects**/**",
+                                        "/users**/**",
+                                        "/issues**/**"
+                                )
+                                .authenticated()
+
+                                .requestMatchers(
+                                        HttpMethod.DELETE,
+                                        "/projects**/**",
+                                        "/users**/**",
+                                        "/issues**/**"
+                                )
+                                .denyAll()
+
                                 .anyRequest()
                                 .denyAll()
                 )

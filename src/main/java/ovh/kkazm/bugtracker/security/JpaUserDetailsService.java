@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ovh.kkazm.bugtracker.user.SecurityUser;
+import ovh.kkazm.bugtracker.user.UserDetailsImpl;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
 @Service
@@ -17,7 +17,7 @@ public class JpaUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .map(SecurityUser::new)
+                .map(UserDetailsImpl::new)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 
