@@ -19,7 +19,7 @@ By default, the application listens on all interfaces and on port 8080.
 
 To run all tests, execute the following command:
 
-    ajsodifajio
+    ./gradlew test
 
 ## Database
 

@@ -10,35 +10,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import ovh.kkazm.bugtracker.CommonDatabaseSetup;
 import ovh.kkazm.bugtracker.project.ProjectService.ProjectInfo;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-class ProjectRepositoryTest {
-
-    public static final String TEST_USERNAME = "Test username";
-    public static final String TEST_PROJECT_NAME = "Test project";
-    @Autowired
-    private ProjectRepository projectRepository;
-    @Autowired
-    private UserRepository userRepository;
-
-    @BeforeEach
-    void setUp() {
-        User user = new User();
-        user.setUsername(TEST_USERNAME);
-        userRepository.save(user);
-
-        Project project = new Project();
-        project.setName(TEST_PROJECT_NAME);
-        project.setOwner(user);
-        projectRepository.save(project);
-    }
+class ProjectRepositoryTest extends CommonDatabaseSetup {
 
     @Test
     void findBy() {
@@ -54,11 +35,17 @@ class ProjectRepositoryTest {
 
     @Test
     void existsByNameIgnoreCase() {
+        boolean normalCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME);
         boolean lowerCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME.toLowerCase());
         boolean upperCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME.toUpperCase());
+        boolean bad_upperCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME.toUpperCase() + " bad string");
+        boolean bad_lowerCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME.toLowerCase() + " bad string");
 
+        assertTrue(normalCaseBool);
         assertTrue(lowerCaseBool);
         assertTrue(upperCaseBool);
+        assertFalse(bad_lowerCaseBool);
+        assertFalse(bad_upperCaseBool);
     }
 
 }

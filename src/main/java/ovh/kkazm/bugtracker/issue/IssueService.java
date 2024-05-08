@@ -90,6 +90,8 @@ public class IssueService {
 
         UserInfo getReporter();
 
+        ProjectInfo getProject();
+
         /**
          * Projection for {@link User}
          */
@@ -97,6 +99,17 @@ public class IssueService {
             Long getId();
 
             String getUsername();
+        }
+
+        /**
+         * Projection for {@link ovh.kkazm.bugtracker.project.Project}
+         */
+        interface ProjectInfo {
+            Long getId();
+
+            String getName();
+
+            ZonedDateTime getCreatedAt();
         }
     }
 }

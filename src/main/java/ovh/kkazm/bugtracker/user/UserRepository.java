@@ -8,7 +8,7 @@ import ovh.kkazm.bugtracker.user.UserService.UserInfo;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<UserInfo> findBy(Pageable pageable);
 
