@@ -1,8 +1,6 @@
 package ovh.kkazm.bugtracker.project;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -12,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import ovh.kkazm.bugtracker.CommonDatabaseSetup;
 import ovh.kkazm.bugtracker.project.ProjectService.ProjectInfo;
-import ovh.kkazm.bugtracker.user.User;
-import ovh.kkazm.bugtracker.user.UserRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,14 +19,17 @@ class ProjectRepositoryTest extends CommonDatabaseSetup {
 
     @Test
     void findBy() {
-        Pageable page = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Pageable page = PageRequest.of(0, 20, Sort.by(Sort.Direction.ASC, "name"));
 
         Page<ProjectInfo> projectInfoPage = projectRepository.findBy(page);
 
+        assertEquals(2, projectInfoPage.getTotalElements());
         ProjectInfo projectInfo = projectInfoPage.getContent().get(0);
-        assertEquals(1, projectInfoPage.getTotalElements());
+        ProjectInfo projectInfo2 = projectInfoPage.getContent().get(1);
         assertEquals(TEST_PROJECT_NAME, projectInfo.getName());
         assertEquals(TEST_USERNAME, projectInfo.getOwner().getUsername());
+        assertEquals(TEST_PROJECT_NAME_2, projectInfo2.getName());
+        assertEquals(TEST_USERNAME_2, projectInfo2.getOwner().getUsername());
     }
 
     @Test
@@ -38,8 +37,8 @@ class ProjectRepositoryTest extends CommonDatabaseSetup {
         boolean normalCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME);
         boolean lowerCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME.toLowerCase());
         boolean upperCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME.toUpperCase());
-        boolean bad_upperCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME.toUpperCase() + " bad string");
-        boolean bad_lowerCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME.toLowerCase() + " bad string");
+        boolean bad_upperCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME.toUpperCase() + " bad string example");
+        boolean bad_lowerCaseBool = projectRepository.existsByNameIgnoreCase(TEST_PROJECT_NAME.toLowerCase() + " bad string example");
 
         assertTrue(normalCaseBool);
         assertTrue(lowerCaseBool);

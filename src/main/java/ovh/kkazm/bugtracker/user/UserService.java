@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ovh.kkazm.bugtracker.security.JwtService;
 
+import java.time.ZonedDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -67,6 +69,8 @@ public class UserService {
     public interface UserInfo {
         Long getId();
         String getUsername();
+
+        ZonedDateTime getCreatedAt();
     }
 
     @Builder

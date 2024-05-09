@@ -35,10 +35,12 @@ public class ProjectService {
         final var name = projectCreationRequest.projectName();
         final var project = new Project();
         project.setName(name);
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid project owner"));
         project.setOwner(user);
+
         if (projectRepository.existsByNameIgnoreCase(project.getName())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "A project with this name already exists.");
         } else {

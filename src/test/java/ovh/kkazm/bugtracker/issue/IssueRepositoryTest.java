@@ -15,7 +15,8 @@ class IssueRepositoryTest extends CommonDatabaseSetup {
 
     @Test
     void getAllProjectIssues() {
-        Pageable page = PageRequest.of(0, 20, Sort.by(Sort.Direction.ASC, "createdAt"));
+        Pageable page = PageRequest.of(0, 20, Sort.by(Sort.Direction.ASC, "title"));
+
         Page<IssueInfo> allProjectIssues = issueRepository.getAllProjectIssues(1L, page);
         IssueInfo issueInfo = allProjectIssues.getContent().get(0);
         IssueInfo issueInfo2 = allProjectIssues.getContent().get(1);
@@ -26,7 +27,7 @@ class IssueRepositoryTest extends CommonDatabaseSetup {
         assertEquals(TEST_PROJECT_NAME, issueInfo.getProject().getName());
         assertEquals(TEST_PROJECT_NAME, issueInfo2.getProject().getName());
         assertEquals(TEST_USERNAME, issueInfo.getReporter().getUsername());
-        assertEquals(TEST_USERNAME, issueInfo2.getReporter().getUsername());
+        assertEquals(TEST_USERNAME_2, issueInfo2.getReporter().getUsername());
     }
 
     @Test

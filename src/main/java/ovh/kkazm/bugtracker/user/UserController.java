@@ -6,13 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ovh.kkazm.bugtracker.user.UserService.UserInfo;
 import ovh.kkazm.bugtracker.user.UserService.LoginUserRequest;
 import ovh.kkazm.bugtracker.user.UserService.SignUpUserRequest;
+import ovh.kkazm.bugtracker.user.UserService.UserInfo;
 
 import java.util.Map;
 
@@ -53,8 +54,11 @@ public class UserController {
     public Page<UserInfo>
     getAllUsers(@SortDefault(sort = "username") Pageable pageable,
                 @RequestParam(required = false) @Max(20) Integer size) {
-        Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()); // TODO Sort
-        return userService.getAllUsers(pageRequest);
+        Pageable page = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "createdAt")); // TODO Refactor
+        return userService.getAllUsers(page);
     }
 
 }
