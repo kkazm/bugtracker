@@ -36,7 +36,7 @@ public class UserService {
         }
         final User user = User.builder()
                 .username(username)
-                .password(passwordEncoder.encode(request.password()))
+                .password(passwordEncoder.encode(request.password())) // TODO
                 .roles("ROLE_USER") // TODO Which role?
                 .build();
         userRepository.save(user);

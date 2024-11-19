@@ -1,6 +1,12 @@
 myapp:
   jwtKey: hi # TODO
 
+jwt:
+  private:
+    key: classpath:app.key
+  public:
+    key: classpath:app.pub
+
 spring:
   devtools:
     restart:
@@ -27,7 +33,7 @@ spring:
       hibernate:
         #        jpa:
         #          compliance:
-        #            query: true # Force JPA Query compliance
+        #            query: true # Force JPA Query compliance (not recommended)
         highlight_sql: true
         #        generate_statistics: true
         #        use_sql_comments: true
@@ -43,7 +49,6 @@ server:
   error:
     include-stacktrace: never # The field "trace" with stacktrace is present if you have spring-boot-devtools in your classpath
     include-message: always
-#  error:
 #    whitelabel:
 #      enabled: false
 
@@ -68,7 +73,7 @@ logging:
           autoconfigure:
             logging:
               ConditionEvaluationReportLogger: info # Suppress conditions evaluation report
-    sql: debug
+  #    sql: debug
   #    root: trace
   pattern:
     dateformat: HH:mm:ss.SSS

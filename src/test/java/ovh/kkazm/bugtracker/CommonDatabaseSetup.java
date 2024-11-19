@@ -17,7 +17,7 @@ import ovh.kkazm.bugtracker.user.UserRepository;
  */
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-public class CommonDatabaseSetup {
+public abstract class CommonDatabaseSetup {
 
     public static final String TEST_USERNAME = "Test username";
     public static final String TEST_USERNAME_2 = "Test username 2";
@@ -34,6 +34,7 @@ public class CommonDatabaseSetup {
 
     @BeforeEach
     void setUp() {
+        // Users
         User user = new User();
         user.setUsername(TEST_USERNAME);
         userRepository.save(user);
@@ -42,6 +43,7 @@ public class CommonDatabaseSetup {
             user2.setUsername(TEST_USERNAME_2);
             userRepository.save(user2);
 
+        // Projects
         Project project = new Project();
         project.setName(TEST_PROJECT_NAME);
         project.setOwner(user);
@@ -52,6 +54,7 @@ public class CommonDatabaseSetup {
             project2.setOwner(user2);
             projectRepository.save(project2);
 
+        // Issues
         Issue issue = new Issue();
         issue.setTitle(TEST_ISSUE_TITLE);
         issue.setProject(project);

@@ -3,19 +3,33 @@ package ovh.kkazm.bugtracker.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ovh.kkazm.bugtracker.user.User;
 
 import javax.crypto.SecretKey;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 
+/**
+ * Helper service containing utility methods related to the handling of JWTs (signing, verifying etc.)
+ */
 @Service
 public class JwtService {
 
     // TODO Use asymmetric key
-    private final SecretKey key = Jwts.SIG.HS256.key().build();
+    private final SecretKey keey = Jwts.SIG.HS256.key().build();
+    @Getter
+    @Value("${jwt.public.key}")
+    RSAPublicKey publicKey;
+    @Getter
+    @Value("${jwt.private.key}")
+    RSAPrivateKey privateKey;
+
 //    private final String secretString = Encoders.BASE64.encode(key.getEncoded());
 //    KeyPair keyPair = Jwts.SIG.RS256.keyPair().build();
 
@@ -25,7 +39,7 @@ public class JwtService {
                 .subject(user.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
-                .signWith(key)
+                .signWith(privateKey)
                 .compact();
     }
 
@@ -33,12 +47,12 @@ public class JwtService {
         try {
             return Jwts
                     .parser()
-                    .verifyWith(key)
+                    .verifyWith(publicKey)
                     .build()
                     .parseSignedClaims(jwt)
                     .getPayload();
         } catch (JwtException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST); // TODO
         }
     }
 

@@ -15,7 +15,9 @@ Clone the repository and run the following command (JDK 17+ required):
 
     ./gradlew bootRun
 
-By default, the application listens on all interfaces and on port 8080.
+By default, the application is configured to listen on all interfaces and on port 8080. You will probably want to
+use this application with its web browser interface, the source code of which
+is [available in this GitHub repository (http link)](https://github.com/kkazm/bugtracker-ui).
 
 To run all tests, execute the following command:
 
@@ -27,7 +29,7 @@ By default, the application uses the H2 in-memory database. All data is lost aft
 
 When the application is running, the database can be accessed externally using the following connection properties:
 
-    url: jdbc:h2:tcp://localhost:9090/mem:mydb
+    url: jdbc:h2:tcp://localhost:9092/mem:mydb
     driver-class-name: org.h2.Driver
     username: sa
     password:

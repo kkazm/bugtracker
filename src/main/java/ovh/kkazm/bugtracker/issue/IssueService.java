@@ -35,19 +35,21 @@ public class IssueService {
         Issue issue = new Issue();
 
         if (issueRepository.existsByTitleIgnoreCase(issueDto.title())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Issue with this title already exists.");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "An Issue with this title already exists.");
         }
         issue.setTitle(issueDto.title());
 
         issue.setDescription(issueDto.description());
 
-        Project projectReferenceById = projectRepository.getReferenceById(issueDto.projectId());
-        issue.setProject(projectReferenceById);
+        Project project = projectRepository.findById(issueDto.projectId()) // TODO getReferenceById?
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "A Project with this Id does not exist"));
+        issue.setProject(project);
 
-        User user = userRepository.findByUsername(authentication.getName())
+        User user = userRepository.findByUsername(authentication.getName()) // TODO
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid reporter username"));
         issue.setReporter(user);
 
+        // TODO authorization: Assignee must be a member of the project
         String assigneeUsername = issueDto.assigneeUsername();
         if (assigneeUsername != null && !assigneeUsername.trim().isEmpty()) {
             User assignee = userRepository.findByUsername(assigneeUsername)

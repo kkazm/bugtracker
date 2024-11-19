@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.type.SqlTypes;
 import ovh.kkazm.bugtracker.project.Project;
 import ovh.kkazm.bugtracker.user.User;
 
@@ -14,7 +12,6 @@ import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "issue")
-
 @Getter
 @Setter
 public class Issue {
@@ -27,7 +24,7 @@ public class Issue {
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @Lob
+    @Lob // TODO
     @Column(name = "description")
     private String description;
 

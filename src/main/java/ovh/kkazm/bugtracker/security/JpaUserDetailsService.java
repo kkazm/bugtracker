@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import ovh.kkazm.bugtracker.user.UserDetailsImpl;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
+/**
+ * Custom Spring Data JPA implementation of  {@link org.springframework.security.core.userdetails.UserDetailsService}
+ */
 @Service
 @RequiredArgsConstructor
 public class JpaUserDetailsService implements UserDetailsService {
@@ -15,7 +18,8 @@ public class JpaUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+    public UserDetails
+    loadUserByUsername(final String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .map(UserDetailsImpl::new)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));

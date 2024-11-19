@@ -1,6 +1,3 @@
-###
-GET http://localhost:8080/animal
-
 ### Sign up
 < {%
     request.variables.set("username", "konrad")
@@ -59,7 +56,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "title": "My issue 1",
+  "title": "My issue 2",
   "description": "Example description 1",
   "projectId": 1,
   "assigneeUsername": "konrad"
@@ -73,7 +70,7 @@ Content-Type: application/json
 
 {
   "id": 3,
-  "name": "awooooo"
+  "name": "hello"
 }
 
 ###

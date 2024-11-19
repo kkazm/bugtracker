@@ -8,9 +8,11 @@ import ovh.kkazm.bugtracker.user.User;
 
 import java.time.ZonedDateTime;
 
+/**
+ * Project is a container for Issues. It has member
+ */
 @Entity
 @Table(name = "project")
-
 @Getter
 @Setter
 public class Project {

@@ -11,7 +11,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
