@@ -12,7 +12,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import ovh.kkazm.bugtracker.issue.IssueService.IssueDto;
+import ovh.kkazm.bugtracker.issue.IssueService.CreateIssueDto;
 import ovh.kkazm.bugtracker.project.ProjectRepository;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
@@ -37,7 +37,7 @@ class IssueServiceTest {
     @Test
     void createIssue() {
         MockitoAnnotations.openMocks(this);
-        IssueDto issueDto = new IssueDto("Title", "description", 1L, "konrad");
+        CreateIssueDto createIssueDto = new CreateIssueDto("Title", "description", 1L, "konrad");
 
         var token = new UsernamePasswordAuthenticationToken("Hello", "");
 

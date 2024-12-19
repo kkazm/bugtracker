@@ -8,11 +8,13 @@ jwt:
     key: classpath:app.pub
 
 spring:
+  profiles:
+    active: devel
   devtools:
     restart:
       quiet-period: 2000
       poll-interval: 2001
-  #      add-properties: false
+#      add-properties: false
   h2:
     console:
       enabled: true
@@ -44,6 +46,9 @@ spring:
     web:
       pageable:
         max-page-size: 40 # TODO
+  threads:
+    virtual:
+      enabled: false
 
 server:
   error:

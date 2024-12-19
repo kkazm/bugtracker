@@ -31,17 +31,18 @@ public class IssueService {
     private final IssueMapper issueMapper;
 
     @Transactional
-    public IssueDto createIssue(@Valid IssueDto issueDto, Authentication authentication) {
+    public CreateIssueDto
+    createIssue(@Valid CreateIssueDto createIssueDto, Authentication authentication) {
         Issue issue = new Issue();
 
-        if (issueRepository.existsByTitleIgnoreCase(issueDto.title())) {
+        if (issueRepository.existsByTitleIgnoreCase(createIssueDto.title())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "An Issue with this title already exists.");
         }
-        issue.setTitle(issueDto.title());
+        issue.setTitle(createIssueDto.title());
 
-        issue.setDescription(issueDto.description());
+        issue.setDescription(createIssueDto.description());
 
-        Project project = projectRepository.findById(issueDto.projectId()) // TODO getReferenceById?
+        Project project = projectRepository.findById(createIssueDto.projectId()) // TODO getReferenceById?
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "A Project with this Id does not exist"));
         issue.setProject(project);
 
@@ -50,7 +51,7 @@ public class IssueService {
         issue.setReporter(user);
 
         // TODO authorization: Assignee must be a member of the project
-        String assigneeUsername = issueDto.assigneeUsername();
+        String assigneeUsername = createIssueDto.assigneeUsername();
         if (assigneeUsername != null && !assigneeUsername.trim().isEmpty()) {
             User assignee = userRepository.findByUsername(assigneeUsername)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid assignee username"));
@@ -61,19 +62,27 @@ public class IssueService {
         return issueMapper.toDto(savedIssue);
     }
 
+    @Transactional
+    public IssueInfo
+    getIssue(Long issueId) {
+        final var issueById = issueRepository.findIssueInfoById(issueId);
+        return issueById.orElseThrow();
+    }
+
     /**
      * DTO for {@link Issue}
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record IssueDto(
+    public record CreateIssueDto(
             @NotNull @NotBlank
             String title,
             @Size(max = 4096)
             String description,
             @NotNull @Positive
             Long projectId,
+            @NotBlank
             String assigneeUsername
-    ) implements Serializable {
+    ) implements Serializable { // TODO
     }
 
     /**

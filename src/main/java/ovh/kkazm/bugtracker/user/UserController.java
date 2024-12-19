@@ -53,7 +53,7 @@ public class UserController {
     @GetMapping("/users")
     public Page<UserInfo>
     getAllUsers(@SortDefault(sort = "username") Pageable pageable,
-                @RequestParam(required = false) @Max(20) Integer size) {
+                @RequestParam(required = false) @Max(20) Integer ignoredSize) {
         Pageable page = PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),

@@ -27,7 +27,7 @@ To run all tests, execute the following command:
 
 By default, the application uses the H2 in-memory database. All data is lost after application shutdown.
 
-When the application is running, the database can be accessed externally using the following connection properties:
+When the application is running, the database can be accessed externally/remotely using the following connection properties:
 
     url: jdbc:h2:tcp://localhost:9092/mem:mydb
     driver-class-name: org.h2.Driver

@@ -13,18 +13,18 @@ import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
 /**
- * TODO Do not use inheritance here?
+ * TODO(refactor) Do not use inheritance here?
  */
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 public abstract class CommonDatabaseSetup {
 
-    public static final String TEST_USERNAME = "Test username";
-    public static final String TEST_USERNAME_2 = "Test username 2";
-    public static final String TEST_PROJECT_NAME = "Test project";
-    public static final String TEST_PROJECT_NAME_2 = "Test project 2";
-    public static final String TEST_ISSUE_TITLE = "Test issue title";
-    public static final String TEST_ISSUE_TITLE_2 = "Test issue title 2";
+    protected static final String TEST_USERNAME = "Test username";
+    protected static final String TEST_USERNAME_2 = "Test username 2";
+    protected static final String TEST_PROJECT_NAME = "Test project";
+    protected static final String TEST_PROJECT_NAME_2 = "Test project 2";
+    protected static final String TEST_ISSUE_TITLE = "Test issue title";
+    protected static final String TEST_ISSUE_TITLE_2 = "Test issue title 2";
     @Autowired
     protected IssueRepository issueRepository;
     @Autowired

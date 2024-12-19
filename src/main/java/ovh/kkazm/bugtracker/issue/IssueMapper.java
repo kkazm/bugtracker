@@ -1,18 +1,18 @@
 package ovh.kkazm.bugtracker.issue;
 
 import org.mapstruct.*;
-import ovh.kkazm.bugtracker.issue.IssueService.IssueDto;
+import ovh.kkazm.bugtracker.issue.IssueService.CreateIssueDto;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface IssueMapper {
     @Mapping(source = "assigneeUsername", target = "assignee.username")
     @Mapping(source = "projectId", target = "project.id")
-    Issue toEntity(IssueDto issueDto);
+    Issue toEntity(CreateIssueDto createIssueDto);
 
     @InheritInverseConfiguration(name = "toEntity")
-    IssueDto toDto(Issue issue);
+    CreateIssueDto toDto(Issue issue);
 
     @InheritConfiguration(name = "toEntity")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Issue partialUpdate(IssueDto issueDto, @MappingTarget Issue issue);
+    Issue partialUpdate(IssueService.CreateIssueDto createIssueDto, @MappingTarget Issue issue);
 }

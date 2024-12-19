@@ -50,7 +50,7 @@ public class SecurityConfiguration {
                 .cors(withDefaults()) // TODO CORS
                 .headers(headers -> { // TODO Headers
 //                    headers.defaultsDisabled();
-                    headers.frameOptions(withDefaults()).disable();
+                    headers.frameOptions(withDefaults()).disable(); // TODO
 //                    headers.xssProtection(Customizer.withDefaults());
 //                    headers.contentSecurityPolicy(Customizer.withDefaults());
 //                    contentTypeOptions.disable();
@@ -60,7 +60,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers(toH2Console())
-                                .permitAll()
+                                .permitAll() // TODO
 
                                 .requestMatchers(
                                         "/swagger-ui**/**",
@@ -107,9 +107,9 @@ public class SecurityConfiguration {
                                 .anyRequest()
                                 .denyAll()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authenticationProvider(authenticationProvider) // TODO Which AuthenticationProvider?
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .oauth2ResourceServer(
                         httpSecurityOAuth2ResourceServerConfigurer ->
                                 httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults())

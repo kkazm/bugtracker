@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 import ovh.kkazm.bugtracker.issue.Issue;
 import ovh.kkazm.bugtracker.issue.IssueRepository;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
+@Profile({"devel"})
 public class DatabaseInitCommandlineRunner {
 
     @Bean
@@ -61,6 +63,15 @@ public class DatabaseInitCommandlineRunner {
                 project4.setName("Fourth project");
                 project4.setOwner(user4);
 
+                List<Project> projects1 = new ArrayList<>(120);
+                for (int i = 0; i < 100; i++) {
+                    Project project = new Project();
+                    project.setName("Project " + i);
+                    project.setOwner(user4);
+                    projects1.add(project);
+                }
+                projectRepository.saveAll(projects1);
+
                 List<Project> projects = new ArrayList<>();
                 projects.add(project1);
                 projects.add(project2);
@@ -89,12 +100,27 @@ public class DatabaseInitCommandlineRunner {
                 issue6.setTitle("My sixth issue");
                 issue6.setProject(project4);
                 issue6.setReporter(user3);
-                issue6.setDescription("hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello hello ");
-
+                issue6.setDescription("Lorem, ipsum dolor sit amet consectetur adipisicing elit. " +
+                        "Repellat vero quibusdam minima ad sequi? Voluptas maxime ipsum perspiciatis officia" +
+                        " mollitia aliquam error, blanditiis id atque magnam reiciendis itaque labore quasi?");
                 issueRepository.save(issue1);
                 issueRepository.save(issue4);
                 issueRepository.save(issue5);
                 issueRepository.save(issue6);
+
+                List<Issue> issues = new ArrayList<>(120);
+                for (int i = 0; i < 100; i++) {
+                    Issue issue = new Issue();
+                    issue.setTitle("My issue nr " + i);
+                    issue.setProject(project4);
+                    issue.setReporter(user3);
+                    issue.setDescription("Lorem, ipsum dolor sit amet consectetur adipisicing elit. " +
+                            "Repellat vero quibusdam minima ad sequi? Voluptas maxime ipsum perspiciatis officia" +
+                            " mollitia aliquam error, blanditiis id atque magnam reiciendis itaque labore quasi?");
+                    issues.add(issue);
+                }
+                issueRepository.saveAll(issues);
+
                 System.out.println("Completed first commandline runner");
             }
         };
