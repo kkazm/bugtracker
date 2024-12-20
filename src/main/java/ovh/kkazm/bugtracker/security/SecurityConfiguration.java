@@ -107,6 +107,7 @@ public class SecurityConfiguration {
                                 .anyRequest()
                                 .denyAll()
                 )
+
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
@@ -114,11 +115,13 @@ public class SecurityConfiguration {
                         httpSecurityOAuth2ResourceServerConfigurer ->
                                 httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults())
                 )
+
                 .exceptionHandling(exceptions -> exceptions
                         // TODO
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 );
+
         return httpSecurity.build();
     }
 

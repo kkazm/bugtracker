@@ -62,6 +62,9 @@ public class IssueService {
         return issueMapper.toDto(savedIssue);
     }
 
+    /**
+     * @throws java.util.NoSuchElementException
+     */
     @Transactional
     public IssueInfo
     getIssue(Long issueId) {
