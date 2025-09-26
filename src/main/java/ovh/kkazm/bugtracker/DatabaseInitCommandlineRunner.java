@@ -1,6 +1,5 @@
 package ovh.kkazm.bugtracker;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +11,7 @@ import ovh.kkazm.bugtracker.project.Project;
 import ovh.kkazm.bugtracker.project.ProjectRepository;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;

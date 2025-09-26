@@ -1,14 +1,17 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.4.5'
+    id 'org.springframework.boot' version '4.0.0-M3'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'ovh.kkazm'
 version = '0.0.1-SNAPSHOT'
+description = ' A bug tracker with a web based user interface, similar to Jira and Bugzilla.'
 
 java {
-    sourceCompatibility = '17'
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 configurations {
@@ -31,12 +34,14 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.security:spring-security-data'
+    implementation 'org.springframework.boot:spring-boot-h2console' // TODO
     implementation 'com.h2database:h2'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 //    implementation 'org.liquibase:liquibase-core'
-//    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-    implementation 'org.apache.commons:commons-lang3:3.17.0'
+    implementation 'org.apache.commons:commons-lang3:3.19.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
+    implementation 'com.github.therapi:therapi-runtime-javadoc:0.15.0' // Use javadoc as springdoc OpenAPI description
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 //    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
@@ -44,6 +49,8 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0" // TODO Test?
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0'
+    // Use javadoc as springdoc OpenAPI description
 
     compileOnly 'org.projectlombok:lombok'
 
@@ -59,7 +66,7 @@ dependencies {
 //    implementation("org.springframework:spring-instrument:6.2.5")
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3' // or 'io.jsonwebtoken:jjwt-gson:0.12.3' for gson
-    runtimeOnly 'com.h2database:h2'
+//    runtimeOnly 'com.h2database:h2'
 //    runtimeOnly 'org.postgresql:postgresql'
 }
 
