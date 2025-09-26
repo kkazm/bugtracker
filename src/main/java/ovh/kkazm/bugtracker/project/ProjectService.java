@@ -13,10 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ovh.kkazm.bugtracker.issue.IssueRepository;
-import ovh.kkazm.bugtracker.issue.IssueService.IssueInfo;
+import ovh.kkazm.bugtracker.issue.IssueRepository.IssueInfo;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
-import ovh.kkazm.bugtracker.user.UserService.UserInfo;
 
 import java.io.Serializable;
 
@@ -30,13 +29,13 @@ public class ProjectService {
     private final ProjectMapper projectMapper;
 
     @Transactional
-    public ProjectDto
+    public CreateProjectDto
     createProject(ProjectCreationRequest projectCreationRequest) {
         final var name = projectCreationRequest.projectName();
         final var project = new Project();
         project.setName(name);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication(); // TODO
         User user = userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid project owner"));
         project.setOwner(user);
@@ -50,7 +49,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public Page<ProjectInfo>
+    public Page<ProjectRepository.ProjectInfo>
     getAllPublicProjects(Pageable pageable) {
         return projectRepository.findBy(pageable);
     }
@@ -59,7 +58,7 @@ public class ProjectService {
     public Page<IssueInfo>
     getAllProjectIssues(Long projectId, Pageable page) {
         if (!projectRepository.existsById(projectId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Project with this ID, does not exist");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Project with this ID does not exist");
         }
         return issueRepository.getAllProjectIssues(projectId, page);
     }
@@ -72,21 +71,10 @@ public class ProjectService {
     }
 
     /**
-     * Projection for {@link Project}
-     */
-    public interface ProjectInfo {
-        Long getId();
-
-        String getName();
-
-        UserInfo getOwner();
-    }
-
-    /**
      * DTO for {@link Project}
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record ProjectDto(Long id, String name) implements Serializable {
+    public record CreateProjectDto(Long id, String name) implements Serializable {
     }
 
 }

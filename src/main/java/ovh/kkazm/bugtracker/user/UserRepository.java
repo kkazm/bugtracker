@@ -1,13 +1,19 @@
 package ovh.kkazm.bugtracker.user;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import ovh.kkazm.bugtracker.user.UserService.UserInfo;
+import org.springframework.stereotype.Repository;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository
+        extends
+        JpaRepository<User, Long>,
+        MyCustomUserRepository {
 
     /**
      * TODO findAll but return a projection?
@@ -17,5 +23,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 
     boolean existsByUsername(String username);
+
+    /**
+     * Projection for {@link User}
+     */
+    interface UserInfo {
+        Long getId();
+
+        String getUsername();
+
+        ZonedDateTime getCreatedAt();
+    }
 
 }

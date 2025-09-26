@@ -13,7 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ovh.kkazm.bugtracker.user.UserService.LoginUserRequest;
 import ovh.kkazm.bugtracker.user.UserService.SignUpUserRequest;
-import ovh.kkazm.bugtracker.user.UserService.UserInfo;
+import ovh.kkazm.bugtracker.user.UserRepository.UserInfo;
 
 import java.util.Map;
 
@@ -26,9 +26,9 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * Create a user account and return a JWT token
+     * Create a user account and return a JWT token immediately.
      *
-     * @return JWT token
+     * @return a JWT token
      */
     @PostMapping("/signup")
     public ResponseEntity<Map<String, String>>
@@ -38,9 +38,9 @@ public class UserController {
     }
 
     /**
-     * Check for valid credentials and return the JWT token
+     * Check for valid credentials and return a JWT token
      *
-     * @return JWT token
+     * @return a JWT token
      */
     @PostMapping(value = "/login")
     public ResponseEntity<Map<String, String>>
@@ -53,7 +53,7 @@ public class UserController {
     @GetMapping("/users")
     public Page<UserInfo>
     getAllUsers(@SortDefault(sort = "username") Pageable pageable,
-                @RequestParam(required = false) @Max(20) Integer ignoredSize) {
+                @RequestParam(required = false) @Max(20) Integer size) {
         Pageable page = PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),

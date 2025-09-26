@@ -9,7 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import ovh.kkazm.bugtracker.CommonDatabaseSetup;
-import ovh.kkazm.bugtracker.project.ProjectService.ProjectInfo;
+import ovh.kkazm.bugtracker.project.ProjectRepository.ProjectInfo;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -5,9 +5,9 @@ the REST API component.
 
 The corresponding web frontend source code is [available here](https://github.com/kkazm/bugtracker-ui).
 
-**Demo available online at <https://kkazm.ovh/bugtracker>**
+**Demo is available online at <https://kkazm.ovh/bugtracker>**
 
-Swagger UI available at <http://kkazm.ovh/bugtracker/swagger-ui/index.html>
+Swagger UI is available at <http://kkazm.ovh/bugtracker/swagger-ui/index.html>
 
 ## Building and running from source
 

@@ -1,3 +1,6 @@
+debug: true
+
+
 myapp:
   jwtKey: hi # TODO
 
@@ -11,10 +14,11 @@ spring:
   profiles:
     active: devel
   devtools:
+    #add-properties: false
     restart:
       quiet-period: 2000
       poll-interval: 2001
-#      add-properties: false
+      #log-condition-evaluation-delta: false
   h2:
     console:
       enabled: true
@@ -25,61 +29,85 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password:
-  #        url: 'jdbc:postgresql://vps626754.ovh.net/mydb'
-  #        username: postgres
-  #        password: asyncsupportconfigurer
+    #url: 'jdbc:postgresql://localhost/mydb'
+    #username: postgres
+    #password: helloworldjava
+    #hikari:
+    #  maximum-pool-size: 150
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
-        #        jpa:
-        #          compliance:
-        #            query: true # Force JPA Query compliance (not recommended)
+        #jpa:
+        #  compliance:
+        #    query: true # Force JPA Query compliance (not recommended)
         highlight_sql: true
-        #        generate_statistics: true
-        #        use_sql_comments: true
-    #        format_sql: true
+        #generate_statistics: true
+        #use_sql_comments: true
+        #dialect: org.hibernate.dialect.PostgreSQLDialect
+        #format_sql: true
     open-in-view: false
-  #    generate-ddl: true
+    #generate-ddl: true
   data:
     web:
       pageable:
         max-page-size: 40 # TODO
   threads:
     virtual:
-      enabled: false
+      enabled: true
+  #aop:
+  #  proxy-target-class: false
+  #web:
+  #mvc:
+  #  problemdetails:
+  #    enabled: true
 
 server:
   error:
     include-stacktrace: never # The field "trace" with stacktrace is present if you have spring-boot-devtools in your classpath
     include-message: always
-#    whitelabel:
-#      enabled: false
+    #whitelabel:
+    #  enabled: false
+  compression:
+    enabled: true
 
 logging:
   level:
     org:
       hibernate:
-        SQL: DEBUG
-        engine:
-          transaction: DEBUG
-        orm:
-          jdbc:
-            bind: trace
-        #            extract: trace
-        type: trace
+      #  SQL: DEBUG
+      #  engine:
+      #    transaction: DEBUG
+      #  orm:
+      #    jdbc:
+      #      bind: trace
+      #      extract: trace
+      #type: trace
       springframework:
-        orm:
-          jpa: DEBUG
-        transaction: DEBUG
-        transaction.interceptor: TRACE
+        #orm:
+        #  jpa: DEBUG
+        #transaction: DEBUG
+        #transaction.interceptor: TRACE
+        #aop:
+        #  framework: trace
         boot:
           autoconfigure:
             logging:
               ConditionEvaluationReportLogger: info # Suppress conditions evaluation report
-  #    sql: debug
-  #    root: trace
+    #sql: debug
+    #root: trace
   pattern:
     dateformat: HH:mm:ss.SSS
-#    root: fatal
+
+management:
+  endpoint:
+    beans:
+      access: unrestricted # TODO
+  endpoints:
+    web:
+      exposure:
+        include: 'health,beans' # TODO
+
+springdoc:
+  show-actuator: false

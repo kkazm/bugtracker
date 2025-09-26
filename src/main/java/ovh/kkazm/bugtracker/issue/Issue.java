@@ -29,7 +29,7 @@ public class Issue {
     private String description;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private ZonedDateTime createdAt;
 
     @UpdateTimestamp

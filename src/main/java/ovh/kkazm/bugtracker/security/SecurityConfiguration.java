@@ -14,10 +14,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,9 +35,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@EnableWebSecurity
-@EnableMethodSecurity
-@Configuration
+@EnableWebSecurity // Should I use this in a spring boot app?
+@EnableMethodSecurity // Should I use this in a spring boot app?
+//@EnableGlobalMethodSecurity deprecated
+@Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
@@ -46,6 +50,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain
     securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+//                .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable) // TODO CSRF
                 .cors(withDefaults()) // TODO CORS
                 .headers(headers -> { // TODO Headers
@@ -105,14 +110,14 @@ public class SecurityConfiguration {
                                 .denyAll()
 
                                 .anyRequest()
-                                .denyAll()
+                                .permitAll()
                 )
 
                 .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        (SessionManagementConfigurer<HttpSecurity> session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .oauth2ResourceServer(
-                        httpSecurityOAuth2ResourceServerConfigurer ->
+                        (OAuth2ResourceServerConfigurer<HttpSecurity> httpSecurityOAuth2ResourceServerConfigurer) ->
                                 httpSecurityOAuth2ResourceServerConfigurer.jwt(Customizer.withDefaults())
                 )
 
@@ -139,9 +144,6 @@ public class SecurityConfiguration {
         return new NimbusJwtEncoder(jwks);
     }
 
-    /**
-     * Expose(?) AuthenticationManger bean
-     */
     @Bean
     public AuthenticationManager
     authenticationManager(UserDetailsService userDetailsService,

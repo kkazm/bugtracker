@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import ovh.kkazm.bugtracker.CommonDatabaseSetup;
-import ovh.kkazm.bugtracker.user.UserService.UserInfo;
+import ovh.kkazm.bugtracker.user.UserRepository.UserInfo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

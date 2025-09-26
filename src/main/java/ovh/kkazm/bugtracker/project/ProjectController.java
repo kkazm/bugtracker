@@ -11,10 +11,10 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ovh.kkazm.bugtracker.issue.IssueService.IssueInfo;
+import ovh.kkazm.bugtracker.issue.IssueRepository.IssueInfo;
+import ovh.kkazm.bugtracker.project.ProjectService.CreateProjectDto;
 import ovh.kkazm.bugtracker.project.ProjectService.ProjectCreationRequest;
-import ovh.kkazm.bugtracker.project.ProjectService.ProjectDto;
-import ovh.kkazm.bugtracker.project.ProjectService.ProjectInfo;
+import ovh.kkazm.bugtracker.project.ProjectRepository.ProjectInfo;
 
 @RestController
 @CrossOrigin("*") // TODO CORS
@@ -24,12 +24,12 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping("/projects")
-    public ResponseEntity<ProjectDto>
+    public ResponseEntity<CreateProjectDto>
     createProject(@Valid @RequestBody ProjectCreationRequest projectCreationRequest,
                   BindingResult bindingResult) {
 //        if (bindingResult.hasErrors()) return ResponseEntity.badRequest().build();
-        ProjectDto projectDto = projectService.createProject(projectCreationRequest);
-        return ResponseEntity.ok(projectDto);
+        CreateProjectDto createProjectDto = projectService.createProject(projectCreationRequest);
+        return ResponseEntity.ok(createProjectDto);
     }
 
     @GetMapping("/projects")
@@ -56,7 +56,7 @@ public class ProjectController {
 
     @PatchMapping("/projects")
     public ResponseEntity<Page<IssueInfo>>
-    patchProject(@Valid @RequestBody ProjectDto projectDto) {
+    patchProject(@Valid @RequestBody CreateProjectDto createProjectDto) {
         throw new NotImplementedException();
     }
 

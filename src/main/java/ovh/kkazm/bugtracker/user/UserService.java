@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,12 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ovh.kkazm.bugtracker.security.JwtService;
 
-import java.time.ZonedDateTime;
+import javax.sql.DataSource;
 
+import static ovh.kkazm.bugtracker.user.UserRepository.UserInfo;
+
+@Slf4j
 @Service
+//@Validated
 @RequiredArgsConstructor
 public class UserService {
 
+    private final DataSource[] dataSource;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -54,23 +60,13 @@ public class UserService {
                     .build();
             return jwtService.generateToken(user);
         } catch (AuthenticationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Bad credentials");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Bad credentials"); // TODO
         }
     }
 
     @Transactional
-    public Page<UserInfo> getAllUsers(Pageable pageable) {
+    public Page<UserInfo> getAllUsers(final Pageable pageable) {
         return userRepository.findBy(pageable);
-    }
-
-    /**
-     * Projection for {@link User}
-     */
-    public interface UserInfo {
-        Long getId();
-        String getUsername();
-
-        ZonedDateTime getCreatedAt();
     }
 
     @Builder

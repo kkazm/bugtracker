@@ -1,6 +1,6 @@
 ### Sign up
 < {%
-    request.variables.set("username", "konrad")
+    request.variables.set("username", "user2")
     request.variables.set("password", "pass")
 %}
 POST http://localhost:8080/signup

@@ -4,10 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ovh.kkazm.bugtracker.issue.IssueService.IssueInfo;
+import ovh.kkazm.bugtracker.issue.IssueService.IssueDto;
+import ovh.kkazm.bugtracker.issue.IssueRepository.IssueInfo;
 
 import java.util.NoSuchElementException;
 
@@ -18,9 +18,16 @@ public class IssueController {
     private final IssueService issueService;
 
     @PostMapping("/issues")
-    public ResponseEntity<IssueService.CreateIssueDto>
-    createIssue(@Valid @RequestBody IssueService.CreateIssueDto createIssueDto, Authentication authentication) {
-        IssueService.CreateIssueDto issue = issueService.createIssue(createIssueDto, authentication);
+    public ResponseEntity<IssueDto>
+    createIssue(@Valid @RequestBody IssueDto issueDto) {
+        IssueDto issue;
+        try {
+            issue = issueService.createIssue(issueDto);
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(issue);
     }
 

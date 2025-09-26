@@ -7,7 +7,7 @@ import org.springframework.security.data.repository.query.SecurityEvaluationCont
 /**
  * Spring Data and Spring Security integration
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class SpringSecurityDataConfiguration {
 
     @Bean

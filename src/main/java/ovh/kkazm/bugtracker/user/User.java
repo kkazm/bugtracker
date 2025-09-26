@@ -1,5 +1,6 @@
 package ovh.kkazm.bugtracker.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,12 +27,13 @@ public class User {
     @Column(unique = true, nullable = false)
     private String username;
 
+//    @JsonIgnore
     private String password;
 
     private String roles;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private ZonedDateTime createdAt;
 
     public List<SimpleGrantedAuthority> getRoles() {
