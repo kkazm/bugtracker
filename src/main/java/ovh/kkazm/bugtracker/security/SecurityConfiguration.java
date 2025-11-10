@@ -31,7 +31,7 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.boot.security.autoconfigure.servlet.PathRequest.toH2Console;
+import static org.springframework.boot.security.autoconfigure.web.servlet.PathRequest.toH2Console;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity // Should I use this in a spring boot app?
@@ -63,13 +63,14 @@ public class SecurityConfiguration {
                 })
                 .authorizeHttpRequests(
                         authorize -> authorize
+
                                 .requestMatchers(toH2Console())
                                 .permitAll() // TODO
 
                                 .requestMatchers(
-                                        "/swagger-ui**/**",
-                                        "/v3/api-docs**/**",
-                                        "/actuator/**",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/actuator/**", // TODO
                                         "/error",
                                         "/signup",
                                         "/login"
@@ -78,38 +79,30 @@ public class SecurityConfiguration {
 
                                 .requestMatchers(
                                         HttpMethod.GET,
-                                        "/projects**/**",
-                                        "/users**/**",
-                                        "/issues**/**"
+                                        "/projects/**",
+                                        "/users/**",
+                                        "/issues/**"
                                 )
                                 .permitAll()
 
                                 .requestMatchers(
                                         HttpMethod.POST,
-                                        "/projects**/**",
-                                        "/users**/**",
-                                        "/issues**/**"
-                                )
-                                .authenticated()
-
-                                .requestMatchers(
-                                        HttpMethod.PATCH,
-                                        "/projects**/**",
-                                        "/users**/**",
-                                        "/issues**/**"
+                                        "/projects/**",
+                                        "/users/**",
+                                        "/issues/**"
                                 )
                                 .authenticated()
 
                                 .requestMatchers(
                                         HttpMethod.DELETE,
-                                        "/projects**/**",
-                                        "/users**/**",
-                                        "/issues**/**"
+                                        "/projects/**",
+                                        "/users/**",
+                                        "/issues/**"
                                 )
                                 .denyAll()
 
                                 .anyRequest()
-                                .permitAll()
+                                .denyAll()
                 )
 
                 .sessionManagement(

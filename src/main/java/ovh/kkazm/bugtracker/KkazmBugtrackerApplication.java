@@ -3,9 +3,6 @@ package ovh.kkazm.bugtracker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication(proxyBeanMethods = false)
 //@EnableAspectJAutoProxy // TODO

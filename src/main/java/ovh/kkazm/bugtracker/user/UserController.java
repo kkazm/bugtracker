@@ -1,5 +1,6 @@
 package ovh.kkazm.bugtracker.user;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +12,9 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ovh.kkazm.bugtracker.user.UserRepository.UserInfo;
 import ovh.kkazm.bugtracker.user.UserService.LoginUserRequest;
 import ovh.kkazm.bugtracker.user.UserService.SignUpUserRequest;
-import ovh.kkazm.bugtracker.user.UserRepository.UserInfo;
 
 import java.util.Map;
 
@@ -26,11 +27,12 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * Create a user account and return a JWT token immediately.
+     * Create a user account and immediately return a JWT Bearer token.
      *
-     * @return a JWT token
+     * @return a JWT Bearer token
      */
     @PostMapping("/signup")
+//    @SecurityRequirements // Anonymous access TODO
     public ResponseEntity<Map<String, String>>
     signUpUser(@Valid @RequestBody final SignUpUserRequest request) {
         String jwt = userService.signUpUser(request);
@@ -38,11 +40,12 @@ public class UserController {
     }
 
     /**
-     * Check for valid credentials and return a JWT token
+     * Check for valid credentials and return a JWT Bearer token
      *
-     * @return a JWT token
+     * @return a JWT Bearer token
      */
     @PostMapping(value = "/login")
+//    @SecurityRequirements // Anonymous access TODO
     public ResponseEntity<Map<String, String>>
     loginUser(@Valid @RequestBody final LoginUserRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return ResponseEntity.badRequest().build();
