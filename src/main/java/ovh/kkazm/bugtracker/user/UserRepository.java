@@ -11,9 +11,7 @@ import java.time.ZonedDateTime;
 import java.util.Optional;
 
 public interface UserRepository
-        extends
-        JpaRepository<User, Long>,
-        MyCustomUserRepository {
+        extends JpaRepository<User, Long> {
 
     /**
      * TODO findAll but return a projection?

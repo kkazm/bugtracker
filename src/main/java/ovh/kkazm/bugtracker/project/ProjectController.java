@@ -11,7 +11,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ovh.kkazm.bugtracker.issue.IssueRepository.IssueInfo;
 import ovh.kkazm.bugtracker.project.ProjectService.CreateProjectDto;
 import ovh.kkazm.bugtracker.project.ProjectService.ProjectCreationRequest;
 import ovh.kkazm.bugtracker.project.ProjectRepository.ProjectInfo;
@@ -43,21 +42,5 @@ public class ProjectController {
         return ResponseEntity.ok(allPublicProjects);
     }
 
-    @GetMapping("/projects/{projectId}/issues")
-    public ResponseEntity<Page<IssueInfo>>
-    getAllProjectIssues(@PathVariable Long projectId, Pageable pageable) {
-        Pageable page = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                Sort.by(Direction.DESC, "createdAt")); // TODO Refactor
-        Page<IssueInfo> allProjectIssues = projectService.getAllProjectIssues(projectId, page);
-        return ResponseEntity.ok(allProjectIssues);
-    }
-
-    @PatchMapping("/projects")
-    public ResponseEntity<Page<IssueInfo>>
-    patchProject(@Valid @RequestBody CreateProjectDto createProjectDto) {
-        throw new NotImplementedException();
-    }
 
 }

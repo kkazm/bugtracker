@@ -12,8 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import ovh.kkazm.bugtracker.issue.IssueRepository;
-import ovh.kkazm.bugtracker.issue.IssueRepository.IssueInfo;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
@@ -25,7 +23,6 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
-    private final IssueRepository issueRepository;
     private final ProjectMapper projectMapper;
 
     @Transactional
@@ -52,15 +49,6 @@ public class ProjectService {
     public Page<ProjectRepository.ProjectInfo>
     getAllPublicProjects(Pageable pageable) {
         return projectRepository.findBy(pageable);
-    }
-
-    @Transactional
-    public Page<IssueInfo>
-    getAllProjectIssues(Long projectId, Pageable page) {
-        if (!projectRepository.existsById(projectId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Project with this ID does not exist");
-        }
-        return issueRepository.getAllProjectIssues(projectId, page);
     }
 
     public record ProjectCreationRequest(

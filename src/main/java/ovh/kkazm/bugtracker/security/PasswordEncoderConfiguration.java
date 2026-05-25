@@ -11,7 +11,6 @@ public class PasswordEncoderConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder(InjectionPoint injectionPoint) {
-//        public PasswordEncoder passwordEncoder(InjectionPoint injectionPoint) {
         return new BCryptPasswordEncoder();
     }
 
