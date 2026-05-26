@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.h2database:h2'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 //    implementation 'org.liquibase:liquibase-core'
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    implementation 'org.mapstruct:mapstruct:1.6.3'
     implementation 'org.apache.commons:commons-lang3:3.19.0'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
     implementation 'com.github.therapi:therapi-runtime-javadoc:0.15.0' // Use javadoc as springdoc OpenAPI description
@@ -48,16 +48,15 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 //    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0" // TODO Test?
     annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0'
-    // Use javadoc as springdoc OpenAPI description
+    annotationProcessor 'com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0'// Use javadoc as springdoc OpenAPI description
 
     compileOnly 'org.projectlombok:lombok'
 
     testAnnotationProcessor 'org.projectlombok:lombok:'
-    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final" // If you are using mapstruct in test code
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.6.3" // If you are using mapstruct in test code
 
     testCompileOnly 'org.projectlombok:lombok'
 
