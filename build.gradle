@@ -10,7 +10,7 @@ description = 'A bug tracker with a web based user interface, similar to Jira an
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25) // TODO Change to 17 (maybe?)
     }
 }
 
@@ -27,16 +27,15 @@ repositories {
 }
 
 dependencies {
-//    implementation 'org.springframework.boot:spring-boot-starter-actuator' // Slow app startup
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-restclient'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.security:spring-security-data'
-    implementation 'org.springframework.boot:spring-boot-h2console' // TODO Remove after spring 7 release?
-    implementation 'org.springframework.boot:spring-boot-data-jdbc-test' // TODO Remove after spring 7 release?
-    implementation 'org.springframework.boot:spring-boot-data-jpa-test' // TODO Remove after spring 7 release?
+    implementation 'org.springframework.boot:spring-boot-h2console'
     implementation 'com.h2database:h2'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 //    implementation 'org.liquibase:liquibase-core'
@@ -60,10 +59,13 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' // Not needed anymore
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-restclient-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
 
-//     https://mvnrepository.com/artifact/org.springframework/spring-instrument
 //    implementation("org.springframework:spring-instrument:6.2.5")
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3' // or 'io.jsonwebtoken:jjwt-gson:0.12.3' for gson
