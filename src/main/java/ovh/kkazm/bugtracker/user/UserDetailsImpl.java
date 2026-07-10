@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+/**
+ * TODO Maybe extend {@linkplain org.springframework.security.core.userdetails.User Spring's User}
+ */
 @RequiredArgsConstructor
 @Getter
 @Setter

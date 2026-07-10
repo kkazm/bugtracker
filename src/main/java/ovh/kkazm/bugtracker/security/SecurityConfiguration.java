@@ -68,7 +68,9 @@ public class SecurityConfiguration {
                                 .permitAll() // TODO
 
                                 .requestMatchers(
+                                        "/hello", // FIXME
                                         "/swagger-ui/**",
+                                        "/swagger-ui.html",
                                         "/v3/api-docs/**",
                                         "/actuator/**", // TODO
                                         "/error",

@@ -17,7 +17,7 @@ Clone the repository and run the following command (JDK 17+ required):
 
 By default, the application is configured to listen on all interfaces and on port 8080. You will probably want to
 use this application with its web browser interface, the source code of which
-is [available in this GitHub repository (http link)](https://github.com/kkazm/bugtracker-ui).
+is [available on GitHub](https://github.com/kkazm/bugtracker-ui).
 
 To run all tests, execute the following command:
 

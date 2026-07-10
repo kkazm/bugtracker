@@ -3,6 +3,7 @@ package ovh.kkazm.bugtracker;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.BeansException;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -15,6 +16,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 //@WebMvcTest
 //@DirtiesContext
 //@TestInstance
+
+//@DataJpaTest
+//@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+
 class KkazmBugtrackerApplicationTests implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;

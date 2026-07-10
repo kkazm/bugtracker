@@ -1,16 +1,16 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.0-RC1'
+    id 'org.springframework.boot' version '4.1.0'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'ovh.kkazm'
 version = '0.0.1-SNAPSHOT'
-description = ' A bug tracker with a web based user interface, similar to Jira and Bugzilla.'
+description = 'A bug tracker with a web based user interface, similar to Jira and Bugzilla.'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25) // TODO Change to 17 (maybe?)
     }
 }
 
@@ -27,20 +27,19 @@ repositories {
 }
 
 dependencies {
-//    implementation 'org.springframework.boot:spring-boot-starter-actuator' // Slow app startup
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-restclient'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.security:spring-security-data'
-    implementation 'org.springframework.boot:spring-boot-h2console' // TODO Remove after spring 7 release?
-    implementation 'org.springframework.boot:spring-boot-data-jdbc-test' // TODO Remove after spring 7 release?
-    implementation 'org.springframework.boot:spring-boot-data-jpa-test' // TODO Remove after spring 7 release?
+    implementation 'org.springframework.boot:spring-boot-h2console'
     implementation 'com.h2database:h2'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
 //    implementation 'org.liquibase:liquibase-core'
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    implementation 'org.mapstruct:mapstruct:1.6.3'
     implementation 'org.apache.commons:commons-lang3:3.19.0'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
     implementation 'com.github.therapi:therapi-runtime-javadoc:0.15.0' // Use javadoc as springdoc OpenAPI description
@@ -48,23 +47,24 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 //    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0" // TODO Test?
     annotationProcessor 'org.projectlombok:lombok'
-    annotationProcessor 'com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0'
-    // Use javadoc as springdoc OpenAPI description
+    annotationProcessor 'com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0'// Use javadoc as springdoc OpenAPI description
 
     compileOnly 'org.projectlombok:lombok'
 
     testAnnotationProcessor 'org.projectlombok:lombok:'
-    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final" // If you are using mapstruct in test code
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.6.3" // If you are using mapstruct in test code
 
     testCompileOnly 'org.projectlombok:lombok'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-restclient-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
 
-//     https://mvnrepository.com/artifact/org.springframework/spring-instrument
 //    implementation("org.springframework:spring-instrument:6.2.5")
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3' // or 'io.jsonwebtoken:jjwt-gson:0.12.3' for gson
