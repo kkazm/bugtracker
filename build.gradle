@@ -37,7 +37,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-data'
     implementation 'org.springframework.boot:spring-boot-h2console'
     implementation 'com.h2database:h2'
-    implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+    implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
 //    implementation 'org.liquibase:liquibase-core'
     implementation 'org.mapstruct:mapstruct:1.6.3'
     implementation 'org.apache.commons:commons-lang3:3.19.0'
@@ -66,8 +66,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
 
 //    implementation("org.springframework:spring-instrument:6.2.5")
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3' // or 'io.jsonwebtoken:jjwt-gson:0.12.3' for gson
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.13.0'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.13.0' // or 'io.jsonwebtoken:jjwt-gson:0.13.0' for gson
 //    runtimeOnly 'com.h2database:h2'
 //    runtimeOnly 'org.postgresql:postgresql'
 }
