@@ -1,7 +1,11 @@
 pluginManagement {
     repositories {
         maven { url 'https://repo.spring.io/milestone' }
+        //maven { url = 'https://repo.spring.io/snapshot' }
         gradlePluginPortal()
     }
 }
 rootProject.name = 'bugtracker'
+println "${rootProject.name}" // TODO
+println "${rootProject.path}"
+println "${rootProject.children}"

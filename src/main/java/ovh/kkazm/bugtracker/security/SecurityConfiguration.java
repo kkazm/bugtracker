@@ -104,7 +104,7 @@ public class SecurityConfiguration {
                                 .denyAll()
 
                                 .anyRequest()
-                                .denyAll()
+                                .permitAll() // FIXME
                 )
 
                 .sessionManagement(

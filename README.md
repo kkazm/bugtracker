@@ -9,6 +9,10 @@ The corresponding web frontend source code is [available here](https://github.co
 
 Swagger UI is available at <http://kkazm.ovh/bugtracker/swagger-ui/index.html>
 
+## Running
+
+OCI image 
+
 ## Building and running from source
 
 Clone the repository and run the following command (JDK 17+ required):

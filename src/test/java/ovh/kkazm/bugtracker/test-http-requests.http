@@ -28,6 +28,15 @@ Content-Type: application/json
     client.global.set("auth_token", response.body.token)
 %}
 
+### Create a Project
+POST http://localhost:8080/projects
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "projectName": "Example project 10"
+}
+
 ### Get all Users
 GET http://localhost:8080/users?page=0&size=10&sort=wow,desc
 Accept: application/json
@@ -37,15 +46,6 @@ Authorization: Bearer {{auth_token}}
 GET http://localhost:8080/projects?page=0&per_page=5&sort=id&direction=asc
 Accept: application/json
 Authorization: Bearer {{auth_token}}
-
-### Create a Project
-POST http://localhost:8080/projects
-Content-Type: application/json
-Authorization: Bearer {{auth_token}}
-
-{
-  "projectName": "Example project 10"
-}
 
 ### Get all Project Issues
 GET http://localhost:8080/projects/2/issues

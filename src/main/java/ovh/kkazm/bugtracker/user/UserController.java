@@ -40,9 +40,9 @@ public class UserController {
     }
 
     /**
-     * Check for valid credentials and return a JWT Bearer token
+     * Check for valid credentials and return a JWT Bearer token.
      *
-     * @return a JWT Bearer token
+     * @return a JWT Bearer token.
      */
     @PostMapping(value = "/login")
 //    @SecurityRequirements // Anonymous access TODO
