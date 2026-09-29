@@ -20,14 +20,14 @@ import ovh.kkazm.bugtracker.user.UserRepository;
 @Slf4j
 @RequiredArgsConstructor
 public class ProjectService implements ApplicationEventPublisherAware {
-    private final ProjectMapper projectMapper;
 
+    private final ProjectMapper projectMapper;
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private ApplicationEventPublisher publisher;
 
     @Transactional
-    public ProjectCreatedDto createProject(CreateProjectDto projectDTO) {
+    public ProjectCreatedDto create(CreateProjectDto projectDTO) {
         if (projectRepository.existsByName(projectDTO.projectName())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Project with this name already exists");
         }
