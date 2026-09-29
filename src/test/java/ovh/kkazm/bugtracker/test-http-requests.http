@@ -1,6 +1,6 @@
 ### Sign up
 < {%
-    request.variables.set("username", "user2")
+    request.variables.set("username", "user")
     request.variables.set("password", "pass")
 %}
 POST http://localhost:8080/signup
@@ -34,7 +34,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "projectName": "Example project 10"
+  "projectName": "Example project 2"
 }
 
 ### Get all Users

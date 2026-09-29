@@ -27,7 +27,7 @@ public class Project {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "reporter_id", nullable = false)
-    private User reporter;
+    private User owner;
 
     @OneToMany(mappedBy = "project")
     private Set<Issue> issues = new LinkedHashSet<>();
