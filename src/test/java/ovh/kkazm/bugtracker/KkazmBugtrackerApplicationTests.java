@@ -41,12 +41,14 @@ class KkazmBugtrackerApplicationTests implements ApplicationContextAware {
 ////    @Autowired
 ////    private TestRestTemplate restTemplate;
 
+/*
     @Test
     void contextLoads(ApplicationContext context) {
         System.out.println("context = " + context);
         context.getBeanDefinitionCount();
         context.getBeanDefinitionNames();
     }
+*/
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

@@ -5,6 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -45,6 +49,15 @@ public class ProjectService implements ApplicationEventPublisherAware {
         ProjectCreatedDto projectCreatedDto = projectMapper.toDto(savedProject);
         publisher.publishEvent(new ProjectCreatedEvent(this, projectCreatedDto));
         return projectCreatedDto;
+    }
+
+    @Transactional(readOnly = true)
+    public PagedModel<ProjectCreatedDto> getAll(Pageable pageable) {
+        Sort sort = pageable.getSort();
+        Page<ProjectCreatedDto> page;
+        page = projectRepository.findAll(pageable)
+                .map(projectMapper::toDto);
+        return new PagedModel<>(page);
     }
 
     @Override

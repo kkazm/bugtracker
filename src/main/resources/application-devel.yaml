@@ -1,0 +1,15 @@
+
+spring:
+  sql:
+    init:
+      mode: always
+  devtools:
+    add-properties: false
+    restart:
+      quiet-period: 5000
+      poll-interval: 5001
+      #log-condition-evaluation-delta: false
+  data:
+    web:
+      pageable:
+        max-page-size: 5
