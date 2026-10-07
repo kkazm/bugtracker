@@ -47,6 +47,10 @@ GET http://localhost:8080/projects?page=0&size=4000
 Accept: application/json
 Authorization: Bearer {{auth_token}}
 
+### Get a Project by ID
+GET http://localhost:8080/projects/1
+Authorization: Bearer {{auth_token}}
+
 ### Get all Project Issues
 GET http://localhost:8080/projects/2/issues
 

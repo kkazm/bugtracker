@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,9 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ovh.kkazm.bugtracker.project.dtos.CreateProjectDto;
 import ovh.kkazm.bugtracker.project.dtos.ProjectCreatedDto;
+import ovh.kkazm.bugtracker.project.dtos.ProjectDto;
 import ovh.kkazm.bugtracker.project.events.ProjectCreatedEvent;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -53,11 +55,16 @@ public class ProjectService implements ApplicationEventPublisherAware {
 
     @Transactional(readOnly = true)
     public PagedModel<ProjectCreatedDto> getAll(Pageable pageable) {
-        Sort sort = pageable.getSort();
-        Page<ProjectCreatedDto> page;
-        page = projectRepository.findAll(pageable)
+        Page<ProjectCreatedDto> page = projectRepository.findAll(pageable)
                 .map(projectMapper::toDto);
         return new PagedModel<>(page);
+    }
+
+    @Transactional(readOnly = true)
+    public ProjectDto get(Long id) {
+        Optional<Project> project = projectRepository.findById(id);
+        Project p = project.orElseThrow();
+        return projectMapper.toDto1(p);
     }
 
     @Override
