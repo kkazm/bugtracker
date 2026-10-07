@@ -1,7 +1,9 @@
 package ovh.kkazm.bugtracker.project;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ovh.kkazm.bugtracker.issue.Issue;
 import ovh.kkazm.bugtracker.user.User;
 
@@ -13,8 +15,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Project {
 
     @Id

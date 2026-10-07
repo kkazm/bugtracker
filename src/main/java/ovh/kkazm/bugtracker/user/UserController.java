@@ -1,6 +1,5 @@
 package ovh.kkazm.bugtracker.user;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;

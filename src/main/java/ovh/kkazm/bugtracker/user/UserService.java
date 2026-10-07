@@ -11,13 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ovh.kkazm.bugtracker.security.JwtService;
 
-import javax.sql.DataSource;
+import java.util.List;
 
 import static ovh.kkazm.bugtracker.user.UserRepository.UserInfo;
 
@@ -27,7 +28,7 @@ import static ovh.kkazm.bugtracker.user.UserRepository.UserInfo;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final DataSource[] dataSource;
+    //    private final DataSource[] dataSource;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -40,24 +41,24 @@ public class UserService {
         if (userAccountExists) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username taken");
         }
-        final User user = User.builder()
-                .username(username)
-                .password(passwordEncoder.encode(request.password())) // TODO
-                .roles("ROLE_USER") // TODO Which role?
-                .build();
+        final var user = new User();
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(request.password())); // TODO
+        var roles = new SimpleGrantedAuthority("ROLE_USER");
+        user.setRoles(List.of(roles)); // TODO What roles should a User have?
         userRepository.save(user);
         return jwtService.generateToken(user);
     }
 
-    @Transactional
     public String loginUser(final LoginUserRequest request) {
         try {
             authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(request.username(), request.password()));
-            final User user = User.builder()
-                    .username(request.username())
-                    .roles("ROLE_USER")
-                    .build();
+            final var user = new User();
+            user.setUsername(request.username());
+            user.setPassword(passwordEncoder.encode(request.password())); // TODO
+            var roles = new SimpleGrantedAuthority("ROLE_USER");
+            user.setRoles(List.of(roles));
             return jwtService.generateToken(user);
         } catch (AuthenticationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Bad credentials"); // TODO

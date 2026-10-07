@@ -21,14 +21,9 @@ import ovh.kkazm.bugtracker.user.UserRepository;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProjectServiceTests {
@@ -64,7 +59,9 @@ class ProjectServiceTests {
     @Test
     void createSavesProjectForAuthenticatedOwnerAndPublishesCreatedEvent() {
         CreateProjectDto request = new CreateProjectDto("TestProject");
-        User owner = User.builder().id(7L).username("testUser").build();
+        User owner = new User();
+        owner.setId(7L);
+        owner.setUsername("testUser");
         Project savedProject = new Project();
         savedProject.setId(11L);
         savedProject.setName("TestProject");

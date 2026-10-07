@@ -50,11 +50,10 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 //    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
+    annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
     annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0" // TODO Test?
-    annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0'
-    // Use javadoc as springdoc OpenAPI description
 
     compileOnly 'org.projectlombok:lombok'
 

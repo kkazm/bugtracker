@@ -2,6 +2,7 @@ package ovh.kkazm.bugtracker.issue;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
 import ovh.kkazm.bugtracker.project.Project;
@@ -12,6 +13,7 @@ import java.util.Objects;
 @Table(name = "issues")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Issue {
 
     @Id
