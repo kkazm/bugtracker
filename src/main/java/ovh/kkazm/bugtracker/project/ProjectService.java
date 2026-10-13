@@ -13,14 +13,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ovh.kkazm.bugtracker.exceptions.ResourceNotFoundException;
+import ovh.kkazm.bugtracker.issue.IssueRepository;
 import ovh.kkazm.bugtracker.project.dtos.CreateProjectDto;
 import ovh.kkazm.bugtracker.project.dtos.ProjectCreatedDto;
 import ovh.kkazm.bugtracker.project.dtos.ProjectDto;
 import ovh.kkazm.bugtracker.project.events.ProjectCreatedEvent;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
-
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -30,6 +30,7 @@ public class ProjectService implements ApplicationEventPublisherAware {
     private final ProjectMapper projectMapper;
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
+    private final IssueRepository issueRepository;
     private ApplicationEventPublisher publisher;
 
     @Transactional
@@ -62,9 +63,17 @@ public class ProjectService implements ApplicationEventPublisherAware {
 
     @Transactional(readOnly = true)
     public ProjectDto get(Long id) {
-        Optional<Project> project = projectRepository.findById(id);
-        Project p = project.orElseThrow();
-        return projectMapper.toDto1(p);
+        Project p = projectRepository.findWithOwnerById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Project", id));
+        return projectMapper.toProjectDto(p);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Project", id));
+        issueRepository.deleteByProjectId(id);
+        projectRepository.deleteProjectById(id);
     }
 
     @Override

@@ -12,7 +12,7 @@ public interface ProjectMapper {
 
     ProjectCreatedDto toDto(Project project);
 
-    ProjectDto toDto1(Project project);
+    ProjectDto toProjectDto(Project project);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Project partialUpdate(ProjectDto projectDto, @MappingTarget Project project);

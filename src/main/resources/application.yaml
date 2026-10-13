@@ -57,9 +57,9 @@ spring:
   #aop:
   #  proxy-target-class: false
   #web:
-  mvc:
-    problemdetails:
-      enabled: true
+  #mvc:
+  #  problemdetails:
+  #    enabled: true
 
 server:
   error:
@@ -97,6 +97,9 @@ logging:
     #root: trace
   pattern:
     dateformat: HH:mm:ss.SSS
+  #structured:
+  #  format:
+  #    console: ecs
 
 management:
   endpoint:

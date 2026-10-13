@@ -51,6 +51,10 @@ Authorization: Bearer {{auth_token}}
 GET http://localhost:8080/projects/1
 Authorization: Bearer {{auth_token}}
 
+### Delete a Project by ID
+DELETE http://localhost:8080/projects/1
+Authorization: Bearer {{auth_token}}
+
 ### Get all Project Issues
 GET http://localhost:8080/projects/2/issues
 
@@ -79,5 +83,3 @@ Content-Type: application/json
   "id": 3,
   "name": "hello"
 }
-
-

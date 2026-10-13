@@ -1,9 +1,7 @@
 package ovh.kkazm.bugtracker.project;
 
 import org.jspecify.annotations.NonNull;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.*;
 
 import java.util.Optional;
 
@@ -11,8 +9,12 @@ public interface ProjectRepository extends JpaRepository<Project, Long>, JpaSpec
 
     boolean existsByName(String name);
 
-    @EntityGraph(attributePaths = {"owner"})
     @NonNull
-    Optional<Project> findById(@NonNull Long id);
+    @EntityGraph(attributePaths = {"owner"})
+    Optional<Project> findWithOwnerById(@NonNull Long id);
+
+    @Modifying
+    @Query("delete from Project p where p.id = :id")
+    void deleteProjectById(@NonNull Long id);
 
 }

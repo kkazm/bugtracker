@@ -101,7 +101,7 @@ public class SecurityConfiguration {
                                         "/users/**",
                                         "/issues/**"
                                 )
-                                .denyAll()
+                                .authenticated() // FIXME Who can delete what?
 
                                 .anyRequest()
                                 .permitAll() // FIXME

@@ -66,4 +66,10 @@ class ProjectController {
         return ResponseEntity.ok(projectDto);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteProjectById(@PathVariable Long id) {
+        projectService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

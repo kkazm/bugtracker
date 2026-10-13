@@ -9,6 +9,7 @@ public interface UserMapper {
     User toEntity(UserDto userDto);
 
     UserDto toDto(User user);
+//    UserDto toDto2(User user);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     User partialUpdate(UserDto userDto, @MappingTarget User user);
