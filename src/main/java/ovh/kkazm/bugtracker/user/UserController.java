@@ -17,6 +17,9 @@ import ovh.kkazm.bugtracker.user.UserService.SignUpUserRequest;
 
 import java.util.Map;
 
+/**
+ * Endpoints related to the Users
+ */
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin("*") // TODO CORS

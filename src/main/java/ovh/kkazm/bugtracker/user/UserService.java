@@ -29,9 +29,9 @@ import static ovh.kkazm.bugtracker.user.UserRepository.UserInfo;
 public class UserService {
 
     //    private final DataSource[] dataSource;
+    private final JwtService jwtService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     @Transactional

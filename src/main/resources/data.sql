@@ -12,7 +12,7 @@ SELECT id,
        ((id - 1) / 5) + 1
 FROM generate_series(1, 25) AS ids(id);
 
-INSERT INTO issues (id, name, project_id)
+INSERT INTO issues (id, title, project_id)
 SELECT id,
        'Sample issue ' || LPAD(id::text, 2, '0'),
        ((id - 1) / 5) + 1

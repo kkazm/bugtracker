@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.server.ResponseStatusException;
+import ovh.kkazm.bugtracker.exceptions.ResourceNotFoundException;
+import ovh.kkazm.bugtracker.issue.IssueRepository;
 import ovh.kkazm.bugtracker.project.dtos.CreateProjectDto;
 import ovh.kkazm.bugtracker.project.dtos.ProjectCreatedDto;
 import ovh.kkazm.bugtracker.project.events.ProjectCreatedEvent;
@@ -36,6 +39,9 @@ class ProjectServiceTests {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private IssueRepository issueRepository;
 
     @Mock
     private ApplicationEventPublisher publisher;
@@ -114,5 +120,34 @@ class ProjectServiceTests {
         assertEquals("Authenticated user not found: testUser", exception.getMessage());
         verify(projectRepository, never()).save(any(Project.class));
         verifyNoInteractions(projectMapper, publisher);
+    }
+
+    @Test
+    void deleteRemovesProjectIssuesBeforeDeletingProject() {
+        long projectId = 42L;
+        when(projectRepository.findById(projectId)).thenReturn(Optional.of(new Project()));
+
+        projectService.delete(projectId);
+
+        InOrder deletionOrder = inOrder(projectRepository, issueRepository);
+        deletionOrder.verify(projectRepository).findById(projectId);
+        deletionOrder.verify(issueRepository).deleteByProjectId(projectId);
+        deletionOrder.verify(projectRepository).deleteProjectById(projectId);
+    }
+
+    @Test
+    void deleteThrowsWhenProjectDoesNotExist() {
+        long projectId = 42L;
+        when(projectRepository.findById(projectId)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> projectService.delete(projectId)
+        );
+
+        assertEquals("Project", exception.getResource());
+        assertEquals(projectId, exception.getId());
+        verifyNoInteractions(issueRepository);
+        verify(projectRepository, never()).deleteProjectById(projectId);
     }
 }

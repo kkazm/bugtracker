@@ -2,7 +2,6 @@ package ovh.kkazm.bugtracker.project;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
@@ -12,10 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ovh.kkazm.bugtracker.project.dtos.CreateProjectDto;
 import ovh.kkazm.bugtracker.project.dtos.ProjectCreatedDto;
+import ovh.kkazm.bugtracker.project.dtos.ProjectDetailDto;
 import ovh.kkazm.bugtracker.project.dtos.ProjectDto;
 
 import java.net.URI;
 
+/**
+ * Endpoints related to the Projects
+ */
 @RestController
 @RequestMapping("/projects")
 @RequiredArgsConstructor
@@ -41,17 +44,18 @@ class ProjectController {
     // FIXME Somebody can sort 'IgnoringCase'
     /**
      * Get a page of Projects.
+     *
      * @param pageable A Pageable describing pagination
      * @return A Page of Projects
      */
     @GetMapping
-    @PageableAsQueryParam // TODO Check how this looks
-    public ResponseEntity<PagedModel<ProjectCreatedDto>>
-    getAllProjects(@PageableDefault(sort = "name") Pageable pageable) {
+//    @PageableAsQueryParam // TODO Check how this looks
+    public ResponseEntity<PagedModel<ProjectDetailDto>>
+    getAPageOfProjects(@PageableDefault(sort = "name") Pageable pageable) {
         if (pageable.getSort().stream().anyMatch(order -> !order.getProperty().equals("name"))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Projects can only be sorted by name");
         }
-        return ResponseEntity.ok(projectService.getAll(pageable));
+        return ResponseEntity.ok(projectService.getAPageOfProjects(pageable));
     }
 
     /**
@@ -66,6 +70,12 @@ class ProjectController {
         return ResponseEntity.ok(projectDto);
     }
 
+    /**
+     * Delete a Project by ID.
+     *
+     * @param id The id of the Project to delete
+     * @return HTTP 204 on successful delete
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteProjectById(@PathVariable Long id) {
         projectService.delete(id);

@@ -17,6 +17,7 @@ import ovh.kkazm.bugtracker.exceptions.ResourceNotFoundException;
 import ovh.kkazm.bugtracker.issue.IssueRepository;
 import ovh.kkazm.bugtracker.project.dtos.CreateProjectDto;
 import ovh.kkazm.bugtracker.project.dtos.ProjectCreatedDto;
+import ovh.kkazm.bugtracker.project.dtos.ProjectDetailDto;
 import ovh.kkazm.bugtracker.project.dtos.ProjectDto;
 import ovh.kkazm.bugtracker.project.events.ProjectCreatedEvent;
 import ovh.kkazm.bugtracker.user.User;
@@ -54,10 +55,9 @@ public class ProjectService implements ApplicationEventPublisherAware {
         return projectCreatedDto;
     }
 
-    @Transactional(readOnly = true)
-    public PagedModel<ProjectCreatedDto> getAll(Pageable pageable) {
-        Page<ProjectCreatedDto> page = projectRepository.findAll(pageable)
-                .map(projectMapper::toDto);
+    public PagedModel<ProjectDetailDto> getAPageOfProjects(Pageable pageable) {
+        Page<ProjectDetailDto> page = projectRepository.findDetailedAllBy(pageable)
+                .map(projectMapper::toDetailDto);
         return new PagedModel<>(page);
     }
 
