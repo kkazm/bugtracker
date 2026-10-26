@@ -30,7 +30,7 @@ class IssueController {
      * @param createIssueDto Object describing the Issue.
      * @return The created Issue.
      */
-    @PostMapping
+    @PostMapping("/issues")
     ResponseEntity<IssueCreatedDto>
     createIssue(@Valid @RequestBody CreateIssueDto createIssueDto, Principal principal) {
         IssueCreatedDto result = issueService.createIssue(createIssueDto, principal.getName());

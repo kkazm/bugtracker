@@ -11,5 +11,6 @@ import java.io.Serializable;
  * DTO for {@link Issue}
  */
 public record CreateIssueDto(@NotBlank String title,
-                             @NotNull @Positive Long projectId) implements Serializable {
+                             @NotNull @Positive Long projectId,
+                             @NotBlank String description) implements Serializable {
 }

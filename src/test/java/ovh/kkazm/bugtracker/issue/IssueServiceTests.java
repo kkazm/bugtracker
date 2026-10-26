@@ -14,6 +14,7 @@ import ovh.kkazm.bugtracker.project.ProjectRepository;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +23,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class IssueServiceTests {
+
+    private static final String ISSUE_DESCRIPTION = "Submitting valid credentials shows an error.";
 
     @Mock
     private IssueMapper issueMapper;
@@ -40,14 +43,20 @@ class IssueServiceTests {
 
     @Test
     void createIssueSavesIssueWithProjectAndAuthenticatedReporter() {
-        CreateIssueDto request = new CreateIssueDto("Login fails", 17L);
+        CreateIssueDto request = new CreateIssueDto("Login fails", 17L, ISSUE_DESCRIPTION);
         Project project = new Project();
         project.setId(17L);
         User reporter = new User();
         reporter.setId(23L);
         reporter.setUsername("testUser");
         Issue mappedIssue = new Issue();
-        IssueCreatedDto expected = new IssueCreatedDto(31L, "Login fails", 17L);
+        IssueCreatedDto expected = new IssueCreatedDto(
+                31L,
+                "Login fails",
+                17L,
+                ISSUE_DESCRIPTION,
+                Instant.parse("2026-01-15T10:15:30Z")
+        );
 
         when(projectRepository.findById(17L)).thenReturn(Optional.of(project));
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(reporter));
@@ -67,7 +76,7 @@ class IssueServiceTests {
 
     @Test
     void createIssueFailsWhenAuthenticatedUserCannotBeFound() {
-        CreateIssueDto request = new CreateIssueDto("Login fails", 17L);
+        CreateIssueDto request = new CreateIssueDto("Login fails", 17L, ISSUE_DESCRIPTION);
         when(projectRepository.findById(17L)).thenReturn(Optional.of(new Project()));
         when(userRepository.findByUsername("missingUser")).thenReturn(Optional.empty());
 
@@ -84,7 +93,7 @@ class IssueServiceTests {
 
     @Test
     void createIssueFailsWhenProjectDoesNotExist() {
-        CreateIssueDto request = new CreateIssueDto("Login fails", 17L);
+        CreateIssueDto request = new CreateIssueDto("Login fails", 17L, ISSUE_DESCRIPTION);
         when(projectRepository.findById(17L)).thenReturn(Optional.empty());
 
         ResourceNotFoundException exception = assertThrows(

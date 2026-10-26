@@ -10,6 +10,7 @@ import ovh.kkazm.bugtracker.issue.dtos.CreateIssueDto;
 import ovh.kkazm.bugtracker.issue.dtos.IssueCreatedDto;
 
 import java.security.Principal;
+import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -19,6 +20,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class IssueControllerTests {
 
+    private static final String ISSUE_DESCRIPTION = "Submitting valid credentials shows an error.";
+
     @Mock
     private IssueService issueService;
 
@@ -27,8 +30,14 @@ class IssueControllerTests {
 
     @Test
     void createIssueReturnsCreatedResponseAndUsesRequestPrincipalAsReporter() {
-        CreateIssueDto request = new CreateIssueDto("Login fails", 17L);
-        IssueCreatedDto createdIssue = new IssueCreatedDto(31L, "Login fails", 17L);
+        CreateIssueDto request = new CreateIssueDto("Login fails", 17L, ISSUE_DESCRIPTION);
+        IssueCreatedDto createdIssue = new IssueCreatedDto(
+                31L,
+                "Login fails",
+                17L,
+                ISSUE_DESCRIPTION,
+                Instant.parse("2026-01-15T10:15:30Z")
+        );
         Principal principal = () -> "testUser";
         when(issueService.createIssue(request, "testUser")).thenReturn(createdIssue);
 

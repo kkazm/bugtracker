@@ -15,6 +15,8 @@ import ovh.kkazm.bugtracker.issue.dtos.CreateIssueDto;
 import ovh.kkazm.bugtracker.issue.dtos.IssueCreatedDto;
 import ovh.kkazm.bugtracker.issue.dtos.IssueSummaryDto;
 
+import java.time.Instant;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -28,6 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(IssueController.class)
 class IssueControllerMvcTests {
 
+    private static final String ISSUE_DESCRIPTION = "Submitting valid credentials shows an error.";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,23 +40,35 @@ class IssueControllerMvcTests {
 
     @Test
     void createIssueReturnsCreatedResourceAndPassesAuthenticatedUsername() throws Exception {
-        CreateIssueDto request = new CreateIssueDto("Login fails", 17L);
+        CreateIssueDto request = new CreateIssueDto("Login fails", 17L, ISSUE_DESCRIPTION);
         when(issueService.createIssue(request, "testUser"))
-                .thenReturn(new IssueCreatedDto(31L, "Login fails", 17L));
+                .thenReturn(new IssueCreatedDto(
+                        31L,
+                        "Login fails",
+                        17L,
+                        ISSUE_DESCRIPTION,
+                        Instant.parse("2026-01-15T10:15:30Z")
+                ));
 
         mockMvc.perform(post("/issues")
                         .with(user("testUser"))
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                {"title":"Login fails","projectId":17}
+                                {
+                                  "title":"Login fails",
+                                  "projectId":17,
+                                  "description":"Submitting valid credentials shows an error."
+                                }
                                 """))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "/issues/31"))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(31))
                 .andExpect(jsonPath("$.title").value("Login fails"))
-                .andExpect(jsonPath("$.projectId").value(17));
+                .andExpect(jsonPath("$.projectId").value(17))
+                .andExpect(jsonPath("$.description").value(ISSUE_DESCRIPTION))
+                .andExpect(jsonPath("$.createdAt").value("2026-01-15T10:15:30Z"));
 
         verify(issueService).createIssue(request, "testUser");
     }
@@ -64,7 +80,11 @@ class IssueControllerMvcTests {
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                {"title":" ","projectId":17}
+                                {
+                                  "title":" ",
+                                  "projectId":17,
+                                  "description":"Submitting valid credentials shows an error."
+                                }
                                 """))
                 .andExpect(status().isBadRequest());
 

@@ -28,9 +28,8 @@ Content-Type: application/json
     client.global.set("auth_token", response.body.token)
 %}
 
-### Get all Users
+### Get a page of Users
 GET http://localhost:8080/users?page=0&size=10
-Accept: application/json
 Authorization: Bearer {{auth_token}}
 
 ### Create a Project
@@ -44,7 +43,6 @@ Authorization: Bearer {{auth_token}}
 
 ### Get a Page of Projects
 GET http://localhost:8080/projects?page=0&size=20
-Accept: application/json
 Authorization: Bearer {{auth_token}}
 
 ### Get a Project by ID
@@ -55,9 +53,6 @@ Authorization: Bearer {{auth_token}}
 DELETE http://localhost:8080/projects/1
 Authorization: Bearer {{auth_token}}
 
-### Get all Project Issues
-GET http://localhost:8080/projects/2/issues
-
 ### Create an Issue
 POST http://localhost:8080/issues
 Content-Type: application/json
@@ -65,25 +60,11 @@ Authorization: Bearer {{auth_token}}
 
 {
   "title": "My first issue",
-  "projectId": 2
+  "projectId": 2,
+  "description": "Something is wrong"
 }
 
-### Get an issue
-@issueId = 105
-GET http://localhost:8080/issues/{{issueId}}
-
-### Get a page of Issues
+### Get a page of Issues belonging to a Project
 @projectId = 2
 GET http://localhost:8080/projects/{{projectId}}/issues?page=0&size=20
-Content-Type: application/json
 Authorization: Bearer {{auth_token}}
-
-###
-PATCH http://localhost:8080/projects/
-Authorization: Bearer {{auth_token}}
-Content-Type: application/json
-
-{
-  "id": 3,
-  "name": "hello"
-}
