@@ -37,7 +37,7 @@ public class ProjectService implements ApplicationEventPublisherAware {
     @Transactional
     public ProjectCreatedDto create(CreateProjectDto projectDTO) {
         if (projectRepository.existsByName(projectDTO.projectName())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Project with this name already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Project with this title already exists");
         }
         String username = SecurityContextHolder.getContext()
                 .getAuthentication()

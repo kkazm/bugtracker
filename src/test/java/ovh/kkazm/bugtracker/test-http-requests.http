@@ -1,6 +1,6 @@
 ### Sign up
 < {%
-    request.variables.set("username", "user2")
+    request.variables.set("username", "user")
     request.variables.set("password", "pass")
 %}
 POST http://localhost:8080/signup
@@ -68,10 +68,15 @@ Authorization: Bearer {{auth_token}}
   "projectId": 2
 }
 
-
-### Get issue
+### Get an issue
 @issueId = 105
 GET http://localhost:8080/issues/{{issueId}}
+
+### Get a page of Issues
+@projectId = 2
+GET http://localhost:8080/projects/{{projectId}}/issues?page=0&size=20
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
 
 ###
 PATCH http://localhost:8080/projects/

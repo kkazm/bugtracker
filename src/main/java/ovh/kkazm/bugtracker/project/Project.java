@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import ovh.kkazm.bugtracker.issue.Issue;
 import ovh.kkazm.bugtracker.user.User;
 
@@ -31,5 +32,9 @@ public class Project {
 
     @OneToMany(mappedBy = "project")
     private Set<Issue> issues = new LinkedHashSet<>();
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private String createdAt;
 
 }

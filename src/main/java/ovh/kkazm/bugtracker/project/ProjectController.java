@@ -53,7 +53,7 @@ class ProjectController {
     public ResponseEntity<PagedModel<ProjectDetailDto>>
     getAPageOfProjects(@PageableDefault(sort = "name") Pageable pageable) {
         if (pageable.getSort().stream().anyMatch(order -> !order.getProperty().equals("name"))) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Projects can only be sorted by name");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Projects can only be sorted by title");
         }
         return ResponseEntity.ok(projectService.getAPageOfProjects(pageable));
     }

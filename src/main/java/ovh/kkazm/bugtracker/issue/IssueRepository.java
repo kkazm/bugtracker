@@ -1,11 +1,17 @@
 package ovh.kkazm.bugtracker.issue;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface IssueRepository extends JpaRepository<Issue, Long>, JpaSpecificationExecutor<Issue> {
+
+    Page<Issue> findByProject_Id(Long projectId, Pageable pageable);
+
+//    Page<IssueEntity> findByProjectIdAndStatus(Long projectId, IssueStatus status, Pageable pageable);
 
     /**
      * Delete all Issues which belong to a Project with the given ID.

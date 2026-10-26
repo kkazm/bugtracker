@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.proxy.HibernateProxy;
 import ovh.kkazm.bugtracker.project.Project;
+import ovh.kkazm.bugtracker.user.User;
 
 import java.util.Objects;
 
@@ -24,9 +26,20 @@ public class Issue {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Column(name = "description", nullable = false)
+    private String description;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private String createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "reporter_id", nullable = false)
+    private User reporter;
 
     @Override
     public final boolean equals(Object o) {
