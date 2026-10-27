@@ -35,3 +35,9 @@ FROM generate_series(1, 125) AS ids(id);
 SELECT setval('users_seq', (SELECT MAX(id) FROM users));
 SELECT setval('projects_seq', (SELECT MAX(id) FROM projects));
 SELECT setval('issues_seq', (SELECT MAX(id) FROM issues));
+
+INSERT INTO public.users
+VALUES (CURRENT_TIMESTAMP, nextval('users_seq'),
+        '$2a$10$Suh0JMLAUk5E5AHPcmzYmumbPzzTKbTKCwrBm/XtnEM9ZbLqe8ln6',
+        'ROLE_USER',
+        'user');

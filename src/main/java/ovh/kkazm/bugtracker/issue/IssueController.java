@@ -54,4 +54,28 @@ class IssueController {
         return ResponseEntity.ok(issueService.getAPageOfIssues(projectId, pageable));
     }
 
+    /**
+     * Get a single Issue searching by ID.
+     *
+     * @param id The ID of the Issue to find.
+     * @return An Issue
+     */
+    @GetMapping("/issues/{id}")
+    public ResponseEntity<IssueSummaryDto> getIssuesById(@PathVariable Long id) {
+        IssueSummaryDto issueSummaryDto = issueService.get(id);
+        return ResponseEntity.ok(issueSummaryDto);
+    }
+
+    /**
+     * Delete an Issue by ID.
+     *
+     * @param id The id of the Issue to delete
+     * @return HTTP 204 on successful delete
+     */
+    @DeleteMapping("/issues/{id}")
+    public ResponseEntity<Object> deleteProjectById(@PathVariable Long id) {
+        issueService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

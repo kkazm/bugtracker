@@ -23,8 +23,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(IssueController.class)
@@ -46,8 +45,7 @@ class IssueControllerMvcTests {
                         31L,
                         "Login fails",
                         17L,
-                        ISSUE_DESCRIPTION,
-                        Instant.parse("2026-01-15T10:15:30Z")
+                        ISSUE_DESCRIPTION
                 ));
 
         mockMvc.perform(post("/issues")
@@ -122,5 +120,37 @@ class IssueControllerMvcTests {
         assertEquals(2, pageable.getPageNumber());
         assertEquals(5, pageable.getPageSize());
         assertEquals(Sort.by(Sort.Direction.ASC, "title"), pageable.getSort());
+    }
+
+    @Test
+    void getIssuesByIdReturnsIssueDetails() throws Exception {
+        IssueSummaryDto issue = new IssueSummaryDto(
+                31L,
+                "Login fails",
+                Instant.parse("2026-01-15T10:15:30Z"),
+                ISSUE_DESCRIPTION
+        );
+        when(issueService.get(31L)).thenReturn(issue);
+
+        mockMvc.perform(get("/issues/31").with(user("testUser")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(31))
+                .andExpect(jsonPath("$.title").value("Login fails"))
+                .andExpect(jsonPath("$.createdAt").value("2026-01-15T10:15:30Z"))
+                .andExpect(jsonPath("$.description").value(ISSUE_DESCRIPTION));
+
+        verify(issueService).get(31L);
+    }
+
+    @Test
+    void deleteIssueReturnsNoContentAndPassesIdToService() throws Exception {
+        mockMvc.perform(delete("/issues/31")
+                        .with(user("testUser"))
+                        .with(csrf()))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+
+        verify(issueService).delete(31L);
     }
 }

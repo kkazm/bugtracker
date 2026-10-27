@@ -14,7 +14,6 @@ import ovh.kkazm.bugtracker.project.ProjectRepository;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
-import java.time.Instant;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,8 +53,7 @@ class IssueServiceTests {
                 31L,
                 "Login fails",
                 17L,
-                ISSUE_DESCRIPTION,
-                Instant.parse("2026-01-15T10:15:30Z")
+                ISSUE_DESCRIPTION
         );
 
         when(projectRepository.findById(17L)).thenReturn(Optional.of(project));

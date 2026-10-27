@@ -3,13 +3,13 @@
     request.variables.set("username", "user")
     request.variables.set("password", "pass")
 %}
-POST http://localhost:8080/signup
+POST {{host}}/signup
 Content-Type: application/json
 
 {
   "firstName": "Konrad",
   "lastName": "Kowalski",
-  "username":  "{{username}}",
+  "username": "{{username}}",
   "password": "{{password}}"
 }
 > {%
@@ -17,11 +17,11 @@ Content-Type: application/json
 %}
 
 ### Login
-POST http://localhost:8080/login
+POST {{host}}/login
 Content-Type: application/json
 
 {
-  "username": "konrad",
+  "username": "user",
   "password": "pass"
 }
 > {%
@@ -29,11 +29,11 @@ Content-Type: application/json
 %}
 
 ### Get a page of Users
-GET http://localhost:8080/users?page=0&size=10
+GET {{host}}/users?page=0&size=10
 Authorization: Bearer {{auth_token}}
 
 ### Create a Project
-POST http://localhost:8080/projects
+POST {{host}}/projects
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -42,19 +42,19 @@ Authorization: Bearer {{auth_token}}
 }
 
 ### Get a Page of Projects
-GET http://localhost:8080/projects?page=0&size=20
+GET {{host}}/projects?page=0&size=20
 Authorization: Bearer {{auth_token}}
 
 ### Get a Project by ID
-GET http://localhost:8080/projects/1
+GET {{host}}/projects/1
 Authorization: Bearer {{auth_token}}
 
 ### Delete a Project by ID
-DELETE http://localhost:8080/projects/1
+DELETE {{host}}/projects/1
 Authorization: Bearer {{auth_token}}
 
 ### Create an Issue
-POST http://localhost:8080/issues
+POST {{host}}/issues
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
@@ -65,6 +65,22 @@ Authorization: Bearer {{auth_token}}
 }
 
 ### Get a page of Issues belonging to a Project
-@projectId = 2
-GET http://localhost:8080/projects/{{projectId}}/issues?page=0&size=20
+< {%
+    request.variables.set("projectId", 0)
+%}
+GET {{host}}/projects/{{projectId}}/issues?page=0&size=20&sort=id,desc
+Authorization: Bearer {{auth_token}}
+
+### Get and Issue by ID
+< {%
+    request.variables.set("issue_id", 3)
+%}
+GET {{host}}/issues/{{issue_id}}
+Authorization: Bearer {{auth_token}}
+
+### Delete an Issue by ID
+< {%
+    request.variables.set("id", "2")
+%}
+DELETE {{host}}/issues/{{id}}
 Authorization: Bearer {{auth_token}}
