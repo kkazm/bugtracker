@@ -6,11 +6,17 @@ SELECT id,
        CURRENT_TIMESTAMP
 FROM generate_series(1, 5) AS ids(id);
 
-INSERT INTO projects (id, name, owner_id, created_at)
+INSERT INTO projects (id, name, created_at)
 SELECT id,
        'Sample project ' || LPAD(id::text, 2, '0'),
-       ((id - 1) / 5) + 1,
        CURRENT_TIMESTAMP
+FROM generate_series(1, 25) AS ids(id);
+
+INSERT INTO project_memberships (id, user_id, project_id, role)
+SELECT id,
+       ((id - 1) / 5) + 1,
+       id,
+       'ADMIN'
 FROM generate_series(1, 25) AS ids(id);
 
 INSERT INTO issues (id, title, description, project_id, reporter_id, created_at)
@@ -35,6 +41,7 @@ FROM generate_series(1, 125) AS ids(id);
 SELECT setval('users_seq', (SELECT MAX(id) FROM users));
 SELECT setval('projects_seq', (SELECT MAX(id) FROM projects));
 SELECT setval('issues_seq', (SELECT MAX(id) FROM issues));
+SELECT setval('project_memberships_seq', (SELECT MAX(id) FROM project_memberships));
 
 INSERT INTO public.users
 VALUES (CURRENT_TIMESTAMP, nextval('users_seq'),

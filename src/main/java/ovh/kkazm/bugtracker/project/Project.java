@@ -6,8 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import ovh.kkazm.bugtracker.issue.Issue;
-import ovh.kkazm.bugtracker.user.User;
+import ovh.kkazm.bugtracker.projectmembership.ProjectMembership;
 
+import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -26,15 +27,14 @@ public class Project {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
-
     @OneToMany(mappedBy = "project")
     private Set<Issue> issues = new LinkedHashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    private String createdAt;
+    private Instant createdAt;
+
+    @OneToMany(mappedBy = "project")
+    private Set<ProjectMembership> projectMemberships = new LinkedHashSet<>();
 
 }

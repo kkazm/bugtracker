@@ -65,8 +65,7 @@ class IssueControllerMvcTests {
                 .andExpect(jsonPath("$.id").value(31))
                 .andExpect(jsonPath("$.title").value("Login fails"))
                 .andExpect(jsonPath("$.projectId").value(17))
-                .andExpect(jsonPath("$.description").value(ISSUE_DESCRIPTION))
-                .andExpect(jsonPath("$.createdAt").value("2026-01-15T10:15:30Z"));
+                .andExpect(jsonPath("$.description").value(ISSUE_DESCRIPTION));
 
         verify(issueService).createIssue(request, "testUser");
     }

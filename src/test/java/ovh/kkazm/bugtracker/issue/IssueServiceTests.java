@@ -83,7 +83,7 @@ class IssueServiceTests {
                 () -> issueService.createIssue(request, "missingUser")
         );
 
-        assertEquals("Authenticated user not found: ", exception.getResource());
+        assertEquals("User: ", exception.getResource());
         assertEquals("missingUser", exception.getId());
         verify(issueRepository, never()).save(any(Issue.class));
         verifyNoInteractions(issueMapper);

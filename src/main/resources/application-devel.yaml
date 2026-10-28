@@ -6,6 +6,6 @@ spring:
   devtools:
     add-properties: false
     restart:
-      quiet-period: 5000
-      poll-interval: 5001
+      quiet-period: 3000
+      poll-interval: 3001
       #log-condition-evaluation-delta: false

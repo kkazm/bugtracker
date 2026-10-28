@@ -9,10 +9,13 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import ovh.kkazm.bugtracker.projectmembership.ProjectMembership;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -39,6 +42,9 @@ public class User {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
+
+    @OneToMany(mappedBy = "user")
+    private Set<ProjectMembership> projectMemberships = new LinkedHashSet<>();
 
     public List<SimpleGrantedAuthority> getRoles() {
         return Arrays.stream(roles.split(","))

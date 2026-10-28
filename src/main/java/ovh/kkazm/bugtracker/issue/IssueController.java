@@ -28,10 +28,10 @@ class IssueController {
      * Create an Issue
      *
      * @param createIssueDto Object describing the Issue.
-     * @return The created Issue.
+     * @return The created Issue
      */
     @PostMapping("/issues")
-    ResponseEntity<IssueCreatedDto>
+    public ResponseEntity<IssueCreatedDto>
     createIssue(@Valid @RequestBody CreateIssueDto createIssueDto, Principal principal) {
         IssueCreatedDto result = issueService.createIssue(createIssueDto, principal.getName());
         URI locationUri = URI.create("/issues/" + result.id().toString());
@@ -41,6 +41,7 @@ class IssueController {
     /**
      * Get a page of Issues belonging to a Project.
      *
+     * @param projectId The ID of the Project the Issues belong to
      * @param pageable A Pageable describing pagination
      * @return A Page of Issues
      */
@@ -69,7 +70,7 @@ class IssueController {
     /**
      * Delete an Issue by ID.
      *
-     * @param id The id of the Issue to delete
+     * @param id The ID of the Issue to delete
      * @return HTTP 204 on successful delete
      */
     @DeleteMapping("/issues/{id}")

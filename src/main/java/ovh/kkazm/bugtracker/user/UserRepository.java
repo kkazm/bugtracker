@@ -1,13 +1,10 @@
 package ovh.kkazm.bugtracker.user;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Optional;
 
 public interface UserRepository
@@ -30,7 +27,7 @@ public interface UserRepository
 
         String getUsername();
 
-        ZonedDateTime getCreatedAt();
+        Instant getCreatedAt();
     }
 
 }

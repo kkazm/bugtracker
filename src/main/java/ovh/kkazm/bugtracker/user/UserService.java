@@ -1,12 +1,10 @@
 package ovh.kkazm.bugtracker.user;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ovh.kkazm.bugtracker.security.JwtService;
+import ovh.kkazm.bugtracker.user.dtos.LoginUserRequest;
+import ovh.kkazm.bugtracker.user.dtos.SignUpUserRequest;
 
 import java.util.List;
 
@@ -65,33 +65,10 @@ public class UserService {
         }
     }
 
-    @Transactional
-    public Page<UserInfo> getAllUsers(final Pageable pageable) {
-        return userRepository.findBy(pageable);
-    }
-
-    @Builder
-    // TODO Validation
-    public record SignUpUserRequest(
-            String firstName,
-            String lastName,
-            @NotNull
-            @NotBlank
-            String username,
-            String password
-    ) {
-    }
-
-    @Builder
-    // TODO Validation
-    public record LoginUserRequest(
-            @NotNull
-            @NotBlank
-            String username,
-            @NotNull
-            @NotBlank
-            String password
-    ) {
+    public PagedModel<UserInfo>
+    getAllUsers(final Pageable pageable) {
+        Page<UserInfo> page = userRepository.findBy(pageable);
+        return new PagedModel<>(page);
     }
 
 }

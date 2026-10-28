@@ -38,7 +38,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-  "projectName": "Example project 2"
+  "projectName": "Example project 8"
 }
 
 ### Get a Page of Projects
@@ -46,7 +46,10 @@ GET {{host}}/projects?page=0&size=20
 Authorization: Bearer {{auth_token}}
 
 ### Get a Project by ID
-GET {{host}}/projects/1
+< {%
+    request.variables.set("project_id", "1")
+%}
+GET {{host}}/projects/{{project_id}}
 Authorization: Bearer {{auth_token}}
 
 ### Delete a Project by ID
@@ -71,7 +74,7 @@ Authorization: Bearer {{auth_token}}
 GET {{host}}/projects/{{projectId}}/issues?page=0&size=20&sort=id,desc
 Authorization: Bearer {{auth_token}}
 
-### Get and Issue by ID
+### Get an Issue by ID
 < {%
     request.variables.set("issue_id", 3)
 %}

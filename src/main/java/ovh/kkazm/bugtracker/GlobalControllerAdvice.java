@@ -29,4 +29,18 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
         return pd;
     }
 
+/*
+    // TODO
+    @ExceptionHandler(ResourceNotFoundException.class)
+    ProblemDetail handle(ConflictException ex) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        pd.setTitle("Resource not found");
+//        pd.setType(URI.create("https://api.example.com/problems/resource-not-found"));
+        pd.setProperty("errorCode", "RESOURCE_NOT_FOUND");
+        pd.setProperty("timestamp", Instant.now());
+        pd.setProperty("traceId", MDC.get("traceId"));
+        return pd;
+    }
+*/
+
 }

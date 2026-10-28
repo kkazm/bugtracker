@@ -20,8 +20,13 @@ import ovh.kkazm.bugtracker.project.dtos.ProjectCreatedDto;
 import ovh.kkazm.bugtracker.project.dtos.ProjectDetailDto;
 import ovh.kkazm.bugtracker.project.dtos.ProjectDto;
 import ovh.kkazm.bugtracker.project.events.ProjectCreatedEvent;
+import ovh.kkazm.bugtracker.projectmembership.ProjectMembership;
+import ovh.kkazm.bugtracker.projectmembership.ProjectMembershipRepository;
+import ovh.kkazm.bugtracker.projectmembership.ProjectRole;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
+
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -32,23 +37,30 @@ public class ProjectService implements ApplicationEventPublisherAware {
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final IssueRepository issueRepository;
+    private final ProjectMembershipRepository projectMembershipRepository;
     private ApplicationEventPublisher publisher;
 
     @Transactional
     public ProjectCreatedDto create(CreateProjectDto projectDTO) {
         if (projectRepository.existsByName(projectDTO.projectName())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Project with this title already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Project with this name already exists"); // FIXME Change exception type
         }
-        String username = SecurityContextHolder.getContext()
+        String authenticatedUsername = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName(); // FIXME
-        User owner = userRepository.findByUsername(username) // FIXME
-                .orElseThrow(() -> new IllegalStateException("Authenticated user not found: " + username));
+        User user = userRepository.findByUsername(authenticatedUsername)
+                .orElseThrow(() -> new ResourceNotFoundException("Authenticated user", authenticatedUsername));
 
-        Project project = new Project();
+        var project = new Project();
+        var pm = new ProjectMembership();
         project.setName(projectDTO.projectName());
-        project.setOwner(owner);
+        pm.setUser(user);
+        pm.setProject(project);
+        pm.setRole(ProjectRole.OWNER);
+        project.setProjectMemberships(Set.of(pm));
+
         Project savedProject = projectRepository.save(project);
+        ProjectMembership savedPm = projectMembershipRepository.save(pm);
 
         ProjectCreatedDto projectCreatedDto = projectMapper.toDto(savedProject);
         publisher.publishEvent(new ProjectCreatedEvent(this, projectCreatedDto));
@@ -63,7 +75,7 @@ public class ProjectService implements ApplicationEventPublisherAware {
 
     @Transactional(readOnly = true)
     public ProjectDto get(Long id) {
-        Project p = projectRepository.findWithOwnerById(id).orElseThrow(
+        Project p = projectRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Project", id));
         return projectMapper.toProjectDto(p);
     }

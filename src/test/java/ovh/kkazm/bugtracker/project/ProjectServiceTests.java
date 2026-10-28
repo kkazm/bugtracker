@@ -19,6 +19,9 @@ import ovh.kkazm.bugtracker.issue.IssueRepository;
 import ovh.kkazm.bugtracker.project.dtos.CreateProjectDto;
 import ovh.kkazm.bugtracker.project.dtos.ProjectCreatedDto;
 import ovh.kkazm.bugtracker.project.events.ProjectCreatedEvent;
+import ovh.kkazm.bugtracker.projectmembership.ProjectMembership;
+import ovh.kkazm.bugtracker.projectmembership.ProjectMembershipRepository;
+import ovh.kkazm.bugtracker.projectmembership.ProjectRole;
 import ovh.kkazm.bugtracker.user.User;
 import ovh.kkazm.bugtracker.user.UserRepository;
 
@@ -44,6 +47,9 @@ class ProjectServiceTests {
     private IssueRepository issueRepository;
 
     @Mock
+    private ProjectMembershipRepository projectMembershipRepository;
+
+    @Mock
     private ApplicationEventPublisher publisher;
 
     @InjectMocks
@@ -63,19 +69,18 @@ class ProjectServiceTests {
     }
 
     @Test
-    void createSavesProjectForAuthenticatedOwnerAndPublishesCreatedEvent() {
+    void createSavesProjectWithAdminMembershipForAuthenticatedUserAndPublishesCreatedEvent() {
         CreateProjectDto request = new CreateProjectDto("TestProject");
-        User owner = new User();
-        owner.setId(7L);
-        owner.setUsername("testUser");
+        User user = new User();
+        user.setId(7L);
+        user.setUsername("testUser");
         Project savedProject = new Project();
         savedProject.setId(11L);
         savedProject.setName("TestProject");
-        savedProject.setOwner(owner);
         ProjectCreatedDto expected = new ProjectCreatedDto(11L, "TestProject");
 
         when(projectRepository.existsByName("TestProject")).thenReturn(false);
-        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(owner));
+        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
         when(projectRepository.save(any(Project.class))).thenReturn(savedProject);
         when(projectMapper.toDto(savedProject)).thenReturn(expected);
 
@@ -85,7 +90,16 @@ class ProjectServiceTests {
         ArgumentCaptor<Project> projectCaptor = ArgumentCaptor.forClass(Project.class);
         verify(projectRepository).save(projectCaptor.capture());
         assertEquals("TestProject", projectCaptor.getValue().getName());
-        assertSame(owner, projectCaptor.getValue().getOwner());
+        assertEquals(1, projectCaptor.getValue().getProjectMemberships().size());
+
+        ProjectMembership membership = projectCaptor.getValue().getProjectMemberships().iterator().next();
+        assertSame(user, membership.getUser());
+        assertSame(projectCaptor.getValue(), membership.getProject());
+        assertEquals(ProjectRole.OWNER, membership.getRole());
+
+        ArgumentCaptor<ProjectMembership> membershipCaptor = ArgumentCaptor.forClass(ProjectMembership.class);
+        verify(projectMembershipRepository).save(membershipCaptor.capture());
+        assertSame(membership, membershipCaptor.getValue());
         verify(projectMapper).toDto(savedProject);
 
         ArgumentCaptor<ProjectCreatedEvent> eventCaptor = ArgumentCaptor.forClass(ProjectCreatedEvent.class); // TODO
@@ -104,7 +118,7 @@ class ProjectServiceTests {
 
         assertEquals(HttpStatus.CONFLICT, exception.getStatusCode());
         verify(projectRepository, never()).save(any(Project.class));
-        verifyNoInteractions(userRepository, projectMapper, publisher);
+        verifyNoInteractions(userRepository, projectMembershipRepository, projectMapper, publisher);
     }
 
     @Test
@@ -112,14 +126,14 @@ class ProjectServiceTests {
         when(projectRepository.existsByName("TestProject")).thenReturn(false);
         when(userRepository.findByUsername("testUser")).thenReturn(Optional.empty());
 
-        IllegalStateException exception = assertThrows(
-                IllegalStateException.class,
+        ResourceNotFoundException exception = assertThrows(
+                ResourceNotFoundException.class,
                 () -> projectService.create(new CreateProjectDto("TestProject"))
         );
 
         assertEquals("Authenticated user not found: testUser", exception.getMessage());
         verify(projectRepository, never()).save(any(Project.class));
-        verifyNoInteractions(projectMapper, publisher);
+        verifyNoInteractions(projectMembershipRepository, projectMapper, publisher);
     }
 
     @Test

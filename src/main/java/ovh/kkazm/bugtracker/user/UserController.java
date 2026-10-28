@@ -1,19 +1,18 @@
 package ovh.kkazm.bugtracker.user;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.SortDefault;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ovh.kkazm.bugtracker.user.UserRepository.UserInfo;
-import ovh.kkazm.bugtracker.user.UserService.LoginUserRequest;
-import ovh.kkazm.bugtracker.user.UserService.SignUpUserRequest;
+import ovh.kkazm.bugtracker.user.dtos.LoginUserRequest;
+import ovh.kkazm.bugtracker.user.dtos.SignUpUserRequest;
 
 import java.util.Map;
 
@@ -34,7 +33,7 @@ public class UserController {
      * @return a JWT Bearer token
      */
     @PostMapping("/signup")
-//    @SecurityRequirements // Anonymous access TODO
+//    @SecurityRequirements
     public ResponseEntity<Map<String, String>>
     signUpUser(@Valid @RequestBody final SignUpUserRequest request) {
         String jwt = userService.signUpUser(request);
@@ -47,7 +46,7 @@ public class UserController {
      * @return a JWT Bearer token.
      */
     @PostMapping(value = "/login")
-//    @SecurityRequirements // Anonymous access TODO
+//    @SecurityRequirements
     public ResponseEntity<Map<String, String>>
     loginUser(@Valid @RequestBody final LoginUserRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return ResponseEntity.badRequest().build();
@@ -56,14 +55,12 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public Page<UserInfo>
-    getAllUsers(@SortDefault(sort = "username") Pageable pageable,
-                @RequestParam(required = false) @Max(20) Integer size) {
-        Pageable page = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                Sort.by(Sort.Direction.DESC, "createdAt")); // TODO Refactor
-        return userService.getAllUsers(page);
+    public PagedModel<UserInfo>
+    getAPageOfUsers(@PageableDefault(sort = "username") Pageable pageable) {
+        if (pageable.getSort().stream().anyMatch(order -> !order.getProperty().equals("username"))) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Users can only be sorted by username");
+        }
+        return userService.getAllUsers(pageable);
     }
 
 }
