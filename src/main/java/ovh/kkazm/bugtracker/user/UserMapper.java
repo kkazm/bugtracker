@@ -8,7 +8,7 @@ public interface UserMapper {
     @BeanMapping(builder = @Builder(disableBuilder = true))
     User toEntity(UserDto userDto);
 
-    UserDto toDto(User user);
+    UserDto toUserDto(User user);
 //    UserDto toDto2(User user);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

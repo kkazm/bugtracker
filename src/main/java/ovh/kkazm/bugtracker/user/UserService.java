@@ -14,13 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import ovh.kkazm.bugtracker.exceptions.ResourceNotFoundException;
 import ovh.kkazm.bugtracker.security.JwtService;
-import ovh.kkazm.bugtracker.user.dtos.LoginUserRequest;
-import ovh.kkazm.bugtracker.user.dtos.SignUpUserRequest;
+import ovh.kkazm.bugtracker.user.dtos.*;
 
 import java.util.List;
-
-import static ovh.kkazm.bugtracker.user.UserRepository.UserInfo;
 
 @Slf4j
 @Service
@@ -33,21 +31,23 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
 
     @Transactional
-    public String signUpUser(final SignUpUserRequest request) {
+    public SignUpUserResponse signUpUser(final SignUpUserRequest request) {
         String username = request.username().toLowerCase();
         final var userAccountExists = userRepository.existsByUsername(username);
         if (userAccountExists) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username taken");
         }
-        final var user = new User();
+        var user = new User();
         user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(request.password())); // TODO
+        user.setPassword(passwordEncoder.encode(request.password()));
         var roles = new SimpleGrantedAuthority("ROLE_USER");
-        user.setRoles(List.of(roles)); // TODO What roles should a User have?
-        userRepository.save(user);
-        return jwtService.generateToken(user);
+        user.setRoles(List.of(roles));
+        User savedUser = userRepository.save(user);
+        String token = jwtService.generateToken(user);
+        return new SignUpUserResponse(token, savedUser.getId());
     }
 
     public String loginUser(final LoginUserRequest request) {
@@ -69,6 +69,18 @@ public class UserService {
     getAllUsers(final Pageable pageable) {
         Page<UserInfo> page = userRepository.findBy(pageable);
         return new PagedModel<>(page);
+    }
+
+    public UserDto get(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", id));
+        return userMapper.toUserDto(user);
+    }
+
+    public void delete(Long id) {
+        userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User", id));
+        userRepository.deleteById(id);
     }
 
 }

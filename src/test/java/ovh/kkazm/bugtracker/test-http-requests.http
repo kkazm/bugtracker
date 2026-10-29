@@ -1,6 +1,6 @@
 ### Sign up
 < {%
-    request.variables.set("username", "user")
+    request.variables.set("username", "user2")
     request.variables.set("password", "pass")
 %}
 POST {{host}}/signup

@@ -10,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ovh.kkazm.bugtracker.user.UserRepository.UserInfo;
-import ovh.kkazm.bugtracker.user.dtos.LoginUserRequest;
-import ovh.kkazm.bugtracker.user.dtos.SignUpUserRequest;
+import ovh.kkazm.bugtracker.user.dtos.*;
 
 import java.util.Map;
 
@@ -34,10 +32,10 @@ public class UserController {
      */
     @PostMapping("/signup")
 //    @SecurityRequirements
-    public ResponseEntity<Map<String, String>>
+    public ResponseEntity<SignUpUserResponse>
     signUpUser(@Valid @RequestBody final SignUpUserRequest request) {
-        String jwt = userService.signUpUser(request);
-        return ResponseEntity.ok(Map.of("token", jwt));
+        SignUpUserResponse result = userService.signUpUser(request);
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -61,6 +59,29 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Users can only be sorted by username");
         }
         return userService.getAllUsers(pageable);
+    }
+
+    /**
+     * Get a single User searching by ID.
+     *
+     * @param id The ID of the User to find.
+     * @return A User
+     */
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.get(id));
+    }
+
+    /**
+     * Delete a User by ID.
+     *
+     * @param id The id of the User to delete
+     * @return HTTP 204 on successful delete
+     */
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Object> deleteProjectById(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
